@@ -8,7 +8,7 @@ import { Player$setCarriedItem } from "./hacker";
 import { Form } from "bdsx/bds/form";
 import { EditorWindow } from "./forms";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { Item, ItemStack } from "bdsx/bds/inventory";
+import { ItemStack } from "bdsx/bds/inventory";
 import { Actor } from "bdsx/bds/actor";
 
 namespace OpenTo {
