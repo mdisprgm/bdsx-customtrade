@@ -8,7 +8,7 @@ import { Player$setCarriedItem } from "./hacker";
 import { Form } from "bdsx/bds/form";
 import { EditorWindow } from "./forms";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { ItemStack } from "bdsx/bds/inventory";
+import { Item, ItemStack } from "bdsx/bds/inventory";
 import { Actor } from "bdsx/bds/actor";
 
 namespace OpenTo {
@@ -34,23 +34,20 @@ namespace OpenTo {
 namespace RecipesMgmt {
     export function addRecipe(
         villager: Actor,
-        buyAItemName: string,
-        buyACount: number,
-        buyBItemName: string,
-        buyBCount: number,
-        sellItemName: string,
-        sellCount: number
+        buyAItem: ItemStack,
+        buyBItem: ItemStack,
+        sellItem: ItemStack,
+        destroy: boolean = true
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsVillager(villager))
             return;
-        const buyBItemStack = ItemStack.constructWith(buyBItemName, buyBCount);
         const recipe = CustomTrade.allocateRecipeTag(
-            ItemStack.constructWith(buyAItemName, buyACount), //buyA
+            buyAItem, //buyA
             0, //priceMultiplierA
-            buyBItemStack.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItemStack,
+            buyBItem.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItem,
             0, //priceMultiplierB
             true, //destroy parameters ItemStack
-            ItemStack.constructWith(sellItemName, sellCount), //sell
+            sellItem,
             0, //tier
             2147483647, //max uses
             0 //trade reward Exp
@@ -61,6 +58,12 @@ namespace RecipesMgmt {
         villTag.Offers.Recipes.push(list[0]);
         villager.load(villTag);
         recipe.dispose();
+
+        if (destroy) {
+            buyAItem.destruct();
+            buyBItem.destruct();
+            sellItem.destruct();
+        }
     }
 
     export function removeAllRecipes(villager: Actor) {
@@ -99,12 +102,9 @@ CustomTrade.onVillagerInteract.on((ev) => {
 
                     RecipesMgmt.addRecipe(
                         villager,
-                        buyAItemName,
-                        buyACount,
-                        buyBItemName,
-                        buyBCount,
-                        sellItemName,
-                        sellCount
+                        ItemStack.constructWith(buyAItemName, buyACount),
+                        ItemStack.constructWith(buyBItemName, buyBCount),
+                        ItemStack.constructWith(sellItemName, sellCount)
                     );
                 });
             }
