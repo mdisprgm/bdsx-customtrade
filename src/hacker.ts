@@ -1,4 +1,3 @@
-import { Actor } from "bdsx/bds/actor";
 import { Item, ItemStack } from "bdsx/bds/inventory";
 import { Player } from "bdsx/bds/player";
 import { pdb } from "bdsx/core";
@@ -27,3 +26,4 @@ export const Player$setCarriedItem = CustomTrade.hacker.hooking(
 )((self, item) => {
     return Player$setCarriedItem(self, item);
 });
+pdb.close();
