@@ -14,6 +14,7 @@ const cmd_trader = command.register(
     "custom trader commands",
     CommandPermissionLevel.Operator
 );
+cmd_trader.alias("trademgmt");
 
 export const EditingTargets = new Map<NetworkIdentifier, ActorUniqueID>();
 
@@ -44,8 +45,6 @@ CustomTrade.onVillagerInteract.on((ev) => {
         return CANCEL;
     }
 });
-
-cmd_trader.alias("trademgmt");
 
 cmd_trader.overload(
     (p, o, op) => {
