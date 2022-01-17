@@ -9,7 +9,6 @@ import { Form } from "bdsx/bds/form";
 import { EditorWindow } from "./forms";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { ItemStack } from "bdsx/bds/inventory";
-import { CompoundTag, NBT } from "bdsx/bds/nbt";
 
 async function openToChooseMenu(
     target: NetworkIdentifier
