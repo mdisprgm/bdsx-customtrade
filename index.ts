@@ -68,6 +68,10 @@ export namespace CustomTrade {
         const tag = item.save();
         return tag.tag?.IsCustomTradeWand ?? false;
     }
+    export const VILLAGER = "minecraft:villager_v2";
+    export function IsVillager(entity: Actor) {
+        return entity.getIdentifier() === VILLAGER;
+    }
     export function allocateRecipeTag(
         buyItemA: ItemStack,
         priceMultipliferA: number,

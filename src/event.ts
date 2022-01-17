@@ -6,8 +6,6 @@ import { CustomTrade, VillagerInteractEvent } from "..";
 
 const MCLEVEL = serverInstance.minecraft.getLevel();
 
-const VILLAGER = "minecraft:villager_v2";
-
 events
     .packetBefore(MinecraftPacketIds.InventoryTransaction)
     .on((pkt, ni, id) => {
@@ -19,7 +17,7 @@ events
 
             const entity = MCLEVEL.getRuntimeEntity(data.runtimeId, false);
             if (!entity) return;
-            if (entity.getIdentifier() === VILLAGER) {
+            if (CustomTrade.IsVillager(entity)) {
                 const event = new VillagerInteractEvent(
                     player,
                     entity,
