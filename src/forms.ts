@@ -53,7 +53,7 @@ export namespace EditorWindow {
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addRecipe.input.buyA.Count"),
+                text: CustomTrade.Translate("addRecipe.input.buyA.count"),
                 max: 64,
                 min: 1,
                 default: 1,
@@ -64,7 +64,7 @@ export namespace EditorWindow {
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addRecipe.input.buyB.Count"),
+                text: CustomTrade.Translate("addRecipe.input.buyB.count"),
                 max: 64,
                 min: 1,
                 default: 1,
