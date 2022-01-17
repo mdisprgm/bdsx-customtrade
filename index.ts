@@ -55,6 +55,7 @@ export namespace CustomTrade {
 
     export function Translate(key: string): string {
         const value: string = __TRANSLATOR__[key];
+        if (value === undefined) return key;
         return String(value).replace(/\\n/g, "\n");
     }
 
