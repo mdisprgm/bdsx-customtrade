@@ -31,7 +31,7 @@ namespace OpenTo {
     }
 }
 
-namespace RecipesMgmt {
+export namespace RecipesMgmt {
     export function addRecipe(
         villager: Actor,
         buyAItem: ItemStack,
@@ -119,7 +119,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
             }
         });
         return CANCEL;
-    }/*
+    } /*
     else >>> src/command.ts
     */
 });
