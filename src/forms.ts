@@ -4,8 +4,8 @@ import { CustomTrade } from "..";
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
 export namespace EditorWindow {
     export enum MainMenuChoices {
-        AddRecipe = 1,
-        RemoveAllRecipes = 2,
+        AddRecipe = 0,
+        RemoveAllRecipes = 1,
     }
 
     export const ChooseMenu: FormDataSimple = {
