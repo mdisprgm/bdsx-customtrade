@@ -2,14 +2,18 @@ import { events } from "bdsx/event";
 import { bedrockServer } from "bdsx/launcher";
 import { ProcHacker } from "bdsx/prochacker";
 import { UNDNAME_NAME_ONLY } from "bdsx/dbghelp";
-
-import path = require("path");
-import { ItemStack } from "bdsx/bds/inventory";
 import { Event } from "bdsx/eventtarget";
 import { CANCEL } from "bdsx/common";
 import { ServerPlayer } from "bdsx/bds/player";
 import { Actor } from "bdsx/bds/actor";
+import { ItemStack } from "bdsx/bds/inventory";
 import { NBT, Tag } from "bdsx/bds/nbt";
+
+import path = require("path");
+import fs = require("fs");
+import ini = require("ini");
+
+import "bdsx/bds/implements";
 
 console.log("[CustomTrade] allocated");
 
@@ -25,6 +29,18 @@ bedrockServer.afterOpen().then(() => {
     require("./src");
 });
 
+function loadConfig() {
+    try {
+        const f = fs.readFileSync(
+            path.join(__dirname, "./config.json"),
+            "utf8"
+        );
+        return JSON.parse(f);
+    } catch (err) {
+        throw err;
+    }
+}
+
 export class VillagerInteractEvent {
     constructor(
         public player: ServerPlayer,
@@ -36,6 +52,12 @@ export class VillagerInteractEvent {
 export namespace CustomTrade {
     export const RECIPE_MAX_TIER = 4;
     export const DIRNAME = __dirname;
+
+    export function Translate(key: string): string {
+        const value: string = __TRANSLATOR__[key];
+        return String(value).replace(/\\n/g, "\n");
+    }
+
     export const hacker = ProcHacker.load(
         path.join(CustomTrade.DIRNAME, "./hacker.ini"),
         ["Item::setIsGlint", "Player::setCarriedItem"],
@@ -106,3 +128,15 @@ export namespace CustomTrade {
 events.serverLeave.on(() => {
     CustomTrade.AIR_ITEM.destruct();
 });
+
+const CONFIG = loadConfig();
+if (!CONFIG.lang) {
+    throw new Error("`lnag` is undefined in the config");
+}
+const lang = CONFIG.lang;
+const f = fs.readFileSync(
+    path.join(CustomTrade.DIRNAME, `./data/lang/${lang}.ini`),
+    "utf8"
+);
+
+const __TRANSLATOR__ = ini.parse(f);
