@@ -3,6 +3,11 @@ import { CustomTrade } from "..";
 
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
 export namespace EditorWindow {
+    export enum MainMenuChoices {
+        AddRecipe = 1,
+        RemoveAllRecipes = 2,
+    }
+
     export const ChooseMenu: FormDataSimple = {
         type: "form",
         title: VILLAGER_EDITOR_TITLE,
@@ -24,17 +29,17 @@ export namespace EditorWindow {
             },
         ],
     };
-    export const RemoveAll: FormDataCustom = {
+    export const RemoveAllRecipes: FormDataCustom = {
         type: "custom_form",
         title: VILLAGER_EDITOR_TITLE,
         content: [
             {
                 type: "label",
-                text: CustomTrade.Translate("removeAll.warning"),
+                text: CustomTrade.Translate("removeAllRecipes.warning"),
             },
             {
                 type: "toggle",
-                text: CustomTrade.Translate("removeAll.understand"),
+                text: CustomTrade.Translate("removeAllRecipes.understand"),
             },
         ],
     };
