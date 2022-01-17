@@ -115,10 +115,12 @@ export namespace CustomTrade {
             retTag.buyB = buyBTag;
             retTag.buyBCount = buyBTag.Count;
             retTag.priceMultiplierB = priceMultipliferB ?? 0;
-            destroy && buyItemB.destruct();
+            if (destroy) buyItemB.destruct();
         }
-        destroy && buyItemA.destruct();
-        destroy && sellItem.destruct();
+        if (destroy) {
+            buyItemA.destruct();
+            sellItem.destruct();
+        }
 
         return NBT.allocate(retTag);
     }
