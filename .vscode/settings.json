@@ -1,0 +1,10 @@
+{
+    "files.trimTrailingWhitespace": true,
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+    },
+    "files.exclude": {
+        "**/*.js": { "when": "$(basename).ts" }
+    },
+    "search.useGlobalIgnoreFiles": true
+}
