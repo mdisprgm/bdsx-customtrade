@@ -34,6 +34,7 @@ export class VillagerInteractEvent {
 }
 
 export namespace CustomTrade {
+    export const RECIPE_MAX_TIER = 4;
     export const DIRNAME = __dirname;
     export const hacker = ProcHacker.load(
         path.join(CustomTrade.DIRNAME, "./hacker.ini"),
@@ -56,7 +57,7 @@ export namespace CustomTrade {
         traderExp: number = -1
     ): Tag {
         console.log(CustomTrade.AIR_ITEM.getName());
-        if (tier > 4) tier = 4;
+        if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
         let rewardExp: boolean;
         if (traderExp > 0) {
