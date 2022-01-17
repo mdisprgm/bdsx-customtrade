@@ -54,7 +54,7 @@ export namespace CustomTrade {
     export const DIRNAME = __dirname;
 
     export function Translate(key: string): string {
-        const value: string = __TRANSLATOR__[key];
+        const value: string | undefined = __TRANSLATOR__[key];
         if (value === undefined) return key;
         return String(value).replace(/\\n/g, "\n");
     }
