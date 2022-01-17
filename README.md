@@ -22,6 +22,21 @@ The plugin for bdsx
 4. Send<br>
    <img src="./resource/addrecipe_result.png" alt="addrecipe_result" width="400"/>
 
+# Tip
+
+-   You can set your langauges, in `config.json`:
+
+```json
+{
+    "lang": "en_US"
+}
+```
+
+Supported languages list:<br>
+
+-   `ko_KR`
+-   `en_US`
+
 # TODO
 
 -   Interface with Custom Command
