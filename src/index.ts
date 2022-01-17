@@ -119,9 +119,9 @@ CustomTrade.onVillagerInteract.on((ev) => {
             }
         });
         return CANCEL;
-    } else {
-        return CANCEL;
-    }
+    }/*
+    else >>> src/command.ts
+    */
 });
 /**
  * Sample

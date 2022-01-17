@@ -53,10 +53,17 @@ export namespace CustomTrade {
     export const RECIPE_MAX_TIER = 4;
     export const DIRNAME = __dirname;
 
-    export function Translate(key: string): string {
-        const value: string | undefined = __TRANSLATOR__[key];
-        if (value === undefined) return key;
-        return String(value).replace(/\\n/g, "\n");
+    const FORMAT_SPECIFIER = "%v";
+    export function Translate(key: string, ...args: any[]): string {
+        const raw: string | undefined = __TRANSLATOR__[key];
+        if (raw === undefined) return key;
+        let str = String(raw).replace(/\\n/g, "\n");
+        for (let i = 0; i < args.length; ) {
+            const idx = str.lastIndexOf(FORMAT_SPECIFIER);
+            if (idx < 0) return str;
+            str = str.replace(FORMAT_SPECIFIER, args[i++]);
+        }
+        return str;
     }
 
     export const hacker = ProcHacker.load(
