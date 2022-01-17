@@ -9,6 +9,7 @@ import { Form } from "bdsx/bds/form";
 import { EditorWindow } from "./forms";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { ItemStack } from "bdsx/bds/inventory";
+import { Actor } from "bdsx/bds/actor";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -30,6 +31,47 @@ namespace OpenTo {
     }
 }
 
+namespace RecipesMgmt {
+    export function addRecipe(
+        villager: Actor,
+        buyAItemName: string,
+        buyACount: number,
+        buyBItemName: string,
+        buyBCount: number,
+        sellItemName: string,
+        sellCount: number
+    ) {
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsVillager(villager))
+            return;
+        const buyBItemStack = ItemStack.constructWith(buyBItemName, buyBCount);
+        const recipe = CustomTrade.allocateRecipeTag(
+            ItemStack.constructWith(buyAItemName, buyACount), //buyA
+            0, //priceMultiplierA
+            buyBItemStack.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItemStack,
+            0, //priceMultiplierB
+            true, //destroy parameters ItemStack
+            ItemStack.constructWith(sellItemName, sellCount), //sell
+            0, //tier
+            2147483647, //max uses
+            0 //trade reward Exp
+        );
+
+        const villTag = villager.save();
+        const list = [recipe];
+        villTag.Offers.Recipes.push(list[0]);
+        villager.load(villTag);
+        recipe.dispose();
+    }
+
+    export function removeAllRecipes(villager: Actor) {
+        if (!villager.ctxbase.isVaild() || CustomTrade.IsVillager(villager)) {
+            const villTag = villager.save();
+            villTag.Offers.Recipes = [];
+            villager.load(villTag);
+        }
+    }
+}
+
 CustomTrade.onVillagerInteract.on((ev) => {
     const player = ev.player;
     const ni = player.getNetworkIdentifier();
@@ -47,37 +89,23 @@ CustomTrade.onVillagerInteract.on((ev) => {
                 OpenTo.AddRecipe(ni).then((resp) => {
                     if (resp === null) return;
                     const [
-                        buyAItem,
+                        buyAItemName,
                         buyACount,
-                        buyBItem,
+                        buyBItemName,
                         buyBCount,
-                        sellItem,
+                        sellItemName,
                         sellCount,
                     ] = resp;
 
-                    const buyBItemStack = ItemStack.constructWith(
-                        buyBItem,
-                        buyBCount
+                    RecipesMgmt.addRecipe(
+                        villager,
+                        buyAItemName,
+                        buyACount,
+                        buyBItemName,
+                        buyBCount,
+                        sellItemName,
+                        sellCount
                     );
-                    const recipe = CustomTrade.allocateRecipeTag(
-                        ItemStack.constructWith(buyAItem, buyACount), //buyA
-                        0, //priceMultiplierA
-                        buyBItemStack.sameItem(CustomTrade.AIR_ITEM)
-                            ? null
-                            : buyBItemStack,
-                        0, //priceMultiplierB
-                        true, //destroy parameters ItemStack
-                        ItemStack.constructWith(sellItem, sellCount), //sell
-                        0, //tier
-                        2147483647, //max uses
-                        0 //trade reward Exp
-                    );
-                    if (recipe === null) return;
-                    const villTag = villager.save();
-                    const list = [recipe];
-                    recipe.dispose();
-                    villTag.Offers.Recipes.push(list[0]);
-                    villager.load(villTag);
                 });
             }
             if (resp === EditorWindow.MainMenuChoices.RemoveAllRecipes) {
@@ -86,9 +114,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     const [, confirmed] = resp;
                     if (!confirmed) return;
 
-                    const villTag = villager.save();
-                    villTag.Offers.Recipes = [];
-                    villager.load(villTag);
+                    RecipesMgmt.removeAllRecipes(villager);
                 });
             }
         });
