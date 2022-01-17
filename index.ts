@@ -79,7 +79,6 @@ export namespace CustomTrade {
         maxUses: number,
         traderExp: number = -1
     ): Tag {
-        console.log(CustomTrade.AIR_ITEM.getName());
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
         let rewardExp: boolean;
