@@ -10,22 +10,24 @@ import { EditorWindow } from "./forms";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { ItemStack } from "bdsx/bds/inventory";
 
-async function openToChooseMenu(
-    target: NetworkIdentifier
-): Promise<number | null> {
-    return await Form.sendTo(target, EditorWindow.ChooseMenu);
-}
+namespace OpenTo {
+    export async function ChooseMenu(
+        target: NetworkIdentifier
+    ): Promise<number | null> {
+        return await Form.sendTo(target, EditorWindow.ChooseMenu);
+    }
 
-async function openToAddRecipe(
-    target: NetworkIdentifier
-): Promise<any[] | null> {
-    return await Form.sendTo(target, EditorWindow.AddRecipe);
-}
+    export async function AddRecipe(
+        target: NetworkIdentifier
+    ): Promise<any[] | null> {
+        return await Form.sendTo(target, EditorWindow.AddRecipe);
+    }
 
-async function openToRemoveAllRecipes(
-    target: NetworkIdentifier
-): Promise<any[] | null> {
-    return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
+    export async function RemoveAllRecipes(
+        target: NetworkIdentifier
+    ): Promise<any[] | null> {
+        return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
+    }
 }
 
 CustomTrade.onVillagerInteract.on((ev) => {
@@ -39,10 +41,10 @@ CustomTrade.onVillagerInteract.on((ev) => {
         return;
     }
     if (!player.isSneaking()) {
-        openToChooseMenu(ni).then((resp) => {
+        OpenTo.ChooseMenu(ni).then((resp) => {
             if (resp === null) return;
             if (resp === EditorWindow.MainMenuChoices.AddRecipe) {
-                openToAddRecipe(ni).then((resp) => {
+                OpenTo.AddRecipe(ni).then((resp) => {
                     if (resp === null) return;
                     const [
                         buyAItem,
@@ -79,7 +81,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                 });
             }
             if (resp === EditorWindow.MainMenuChoices.RemoveAllRecipes) {
-                openToRemoveAllRecipes(ni).then((resp) => {
+                OpenTo.RemoveAllRecipes(ni).then((resp) => {
                     if (resp === null) return;
                     const [, confirmed] = resp;
                     if (!confirmed) return;
