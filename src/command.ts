@@ -111,7 +111,7 @@ cmd_trader.overload(
 cmd_trader.overload(
     (p, o, op) => {
         for (const actor of p.targets.newResults(o)) {
-            if (actor.isPlayer()) continue;
+            if (actor.isPlayer() || !CustomTrade.IsValidTrader(actor)) continue;
             const tag = actor.save();
             const att = tag.Attributes.find(
                 (v: any) => v.Name === "minecraft:movement"
