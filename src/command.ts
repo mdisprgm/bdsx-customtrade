@@ -1,5 +1,5 @@
 import { command } from "bdsx/command";
-import { CommandPermissionLevel } from "bdsx/bds/command";
+import { ActorCommandSelector, CommandPermissionLevel } from "bdsx/bds/command";
 import { ItemStack } from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
@@ -8,6 +8,7 @@ import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
 import { PlayerPermission } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
+import { float32_t } from "bdsx/nativetype";
 
 const cmd_trader = command.register(
     "custom_trader",
@@ -73,5 +74,26 @@ cmd_trader.overload(
     },
     {
         value: command.enum("CustomTradeWand", "wand"),
+    }
+);
+
+//0.5 is default for villagers
+cmd_trader.overload(
+    (p, o, op) => {
+        for (const actor of p.targets.newResults(o)) {
+            if (actor.isPlayer()) continue;
+            const tag = actor.save();
+            const att = tag.Attributes.find(
+                (v: any) => v.Name === "minecraft:movement"
+            );
+            console.log(att.Current);
+            att.Current = NBT.float(p.value);
+            actor.load(tag);
+        }
+    },
+    {
+        noai: command.enum("Speed", "speed"),
+        targets: ActorCommandSelector,
+        value: float32_t,
     }
 );
