@@ -135,7 +135,7 @@ export namespace CustomTrade {
             priceMultiplierB: NBT.float(0),
             rewardExp: rewardExp,
             traderExp: traderExp,
-            uses: NBT.int(0),
+            uses: NBT.int(tier),
             tier: tier,
         };
         if (buyItemB) {
