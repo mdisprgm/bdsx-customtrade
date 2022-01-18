@@ -161,7 +161,7 @@ export namespace CustomTrade {
      * @returns If the Item is the `minecraft:air`
      */
     export function IsAir(item: ItemStack, destroy: boolean = true): boolean {
-        const isAir = item.sameItem(AIR_ITEM);
+        const isAir = item.getId() === 0;
         if (destroy) item.destruct();
         return isAir;
     }
