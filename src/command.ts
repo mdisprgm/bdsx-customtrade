@@ -194,14 +194,17 @@ cmd_trader.overload(
 );
 
 //infinite health, zero movement speed
-cmd_trader.overload((p, o, op) => {
-    const player = o.getEntity();
-    if (!player?.isPlayer()) return;
-    if (!TraderCommand.assertHasTargets(player)) return;
+/* cmd_trader.overload(
+    (p, o, op) => {
+        const player = o.getEntity();
+        if (!player?.isPlayer()) return;
+        if (!TraderCommand.assertHasTargets(player)) return;
 
-    const targets = GetTargets(player);
-    if (!targets) return;
-}, {});
+        const targets = GetTargets(player);
+        if (!targets) return;
+    },
+    { option: command.enum("Invincibility", "invincibility", "invc") }
+); */
 
 const CommandRecipeOption = command.enum("recipe", "recipe");
 
