@@ -18,7 +18,7 @@ namespace OpenTo {
         return await Form.sendTo(target, EditorWindow.ChooseMenu);
     }
 
-    export async function AddRecipe(
+    export async function AddSimpleRecipe(
         target: NetworkIdentifier
     ): Promise<any[] | null> {
         return await Form.sendTo(target, EditorWindow.AddRecipe);
@@ -32,7 +32,7 @@ namespace OpenTo {
 }
 
 export namespace RecipesMgmt {
-    export function addRecipe(
+    export function addSimpleRecipe(
         villager: Actor,
         buyAItem: ItemStack,
         buyBItem: ItemStack,
@@ -89,7 +89,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
         OpenTo.ChooseMenu(ni).then((resp) => {
             if (resp === null) return;
             if (resp === EditorWindow.MainMenuChoices.AddRecipe) {
-                OpenTo.AddRecipe(ni).then((resp) => {
+                OpenTo.AddSimpleRecipe(ni).then((resp) => {
                     if (resp === null) return;
                     const [
                         buyAItemName,
@@ -100,7 +100,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                         sellCount,
                     ] = resp;
 
-                    RecipesMgmt.addRecipe(
+                    RecipesMgmt.addSimpleRecipe(
                         villager,
                         ItemStack.constructWith(buyAItemName, buyACount),
                         ItemStack.constructWith(buyBItemName, buyBCount),
