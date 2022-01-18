@@ -81,9 +81,9 @@ export namespace CustomTrade {
     }
     export function allocateRecipeTag(
         buyItemA: ItemStack,
-        priceMultipliferA: number,
+        priceMultiplierA: number,
         buyItemB: ItemStack | null,
-        priceMultipliferB: number | null,
+        priceMultiplierB: number | null,
         destroy: boolean,
         sellItem: ItemStack,
         tier: number,
@@ -110,7 +110,7 @@ export namespace CustomTrade {
             sell: sellTag,
             demand: NBT.int(0),
             maxUses: maxUses,
-            priceMultiplierA: priceMultipliferA,
+            priceMultiplierA: priceMultiplierA,
             priceMultiplierB: NBT.float(0),
             rewardExp: rewardExp,
             traderExp: traderExp,
@@ -121,7 +121,7 @@ export namespace CustomTrade {
             const buyBTag = buyItemB.save();
             retTag.buyB = buyBTag;
             retTag.buyBCount = buyBTag.Count;
-            retTag.priceMultiplierB = priceMultipliferB ?? 0;
+            retTag.priceMultiplierB = priceMultiplierB ?? 0;
             if (destroy) buyItemB.destruct();
         }
         if (destroy) {
