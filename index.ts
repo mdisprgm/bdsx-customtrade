@@ -92,19 +92,19 @@ export namespace CustomTrade {
         priceMultiplierB: number | null,
         destroy: boolean,
         sellItem: ItemStack,
-        demand: number = 0,
-        traderExp: number = 0,
-        maxUses: number = 0x7fffffff,
-        tier: number = 0
+        demand: number = RECIPE_DEFAULT_DEMAND,
+        traderExp: number = RECIPE_DEFAULT_TRADER_EXP,
+        maxUses: number = RECIPE_MAX_USES,
+        tier: number = RECIPE_DEFAULT_TIER
     ): Tag {
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
         let rewardExp: boolean;
-        if (traderExp > 0) {
+        if (traderExp > RECIPE_DEFAULT_TIER) {
             rewardExp = true;
         } else {
             rewardExp = false;
-            traderExp = 0;
+            traderExp = RECIPE_DEFAULT_TIER;
         }
 
         const buyATag = buyItemA.save();
