@@ -1,15 +1,15 @@
 import "./command";
 import "./event";
 
+import { Actor } from "bdsx/bds/actor";
+import { Form } from "bdsx/bds/form";
+import { ItemStack } from "bdsx/bds/inventory";
+import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { PlayerPermission } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
 import { CustomTrade } from "..";
-import { Player$setCarriedItem } from "./hacker";
-import { Form } from "bdsx/bds/form";
 import { EditorWindow } from "./forms";
-import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { ItemStack } from "bdsx/bds/inventory";
-import { Actor } from "bdsx/bds/actor";
+import { Player$setCarriedItem } from "./hacker";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -94,7 +94,7 @@ export namespace RecipesMgmt {
             CustomTrade.RECIPE_DEFAULT_TRADER_EXP, //trade reward Exp
             CustomTrade.RECIPE_MAX_USES, //max uses
             CustomTrade.RECIPE_DEFAULT_TIER, //tier
-            true //destroy parameters ItemStack
+            destroy //destroy parameters ItemStack
         );
 
         const villTag = villager.save();
@@ -147,12 +147,49 @@ CustomTrade.onVillagerInteract.on((ev) => {
                         sellCount,
                     ] = resp;
 
+                    const buyA = ItemStack.constructWith(
+                        buyAItemName,
+                        buyACount
+                    );
+                    const buyB = ItemStack.constructWith(
+                        buyBItemName,
+                        buyBCount
+                    );
+                    const sell = ItemStack.constructWith(
+                        sellItemName,
+                        sellCount
+                    );
                     RecipesMgmt.addSimpleRecipe(
                         villager,
-                        ItemStack.constructWith(buyAItemName, buyACount),
-                        ItemStack.constructWith(buyBItemName, buyBCount),
-                        ItemStack.constructWith(sellItemName, sellCount)
+                        buyA,
+                        buyB,
+                        sell,
+                        false
                     );
+                    if (CustomTrade.IsAir(buyB, false)) {
+                        CustomTrade.SendTranslated(
+                            player,
+                            "addRecipe.success",
+                            `${buyA.getName()}`,
+                            `${buyA.getAmount()}`,
+                            `${sell.getName()}`,
+                            `${sell.getAmount()}`
+                        );
+                    } else {
+                        CustomTrade.SendTranslated(
+                            player,
+                            "addRecipe.buyB.success",
+                            `${buyA.getName()}`,
+                            `${buyA.getAmount()}`,
+                            `${buyB.getName()}`,
+                            `${buyB.getAmount()}`,
+                            `${sell.getName()}`,
+                            `${sell.getAmount()}`
+                        );
+                    }
+                    buyA.destruct();
+                    buyB.destruct();
+                    sell.destruct();
                 });
             }
             if (resp === EditorWindow.MainMenuChoices.RemoveAllRecipes) {
