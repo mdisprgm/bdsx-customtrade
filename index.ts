@@ -75,9 +75,17 @@ export namespace CustomTrade {
         return tag.tag?.IsCustomTradeWand ?? false;
     }
     export const VILLAGER = "minecraft:villager_v2";
-    export function IsVillager(entity: Actor) {
-        return entity.getIdentifier() === VILLAGER;
+    export const WANDERING_TRADER = "minecraft:wandering_trader";
+    export function IsValidTrader(entity: Actor): boolean {
+        const id = entity.getIdentifier();
+        const validEntity = id === VILLAGER || id === WANDERING_TRADER;
+        return validEntity && entity.save().Offers?.Recipes;
     }
+    /**
+     * @deprecated Use IsValidTrader
+     */
+    export const IsVillager = IsValidTrader;
+
     /**
      *
      * @param buyItemA buyA

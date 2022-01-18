@@ -45,7 +45,7 @@ export namespace RecipesMgmt {
         tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
         destroy: boolean = true
     ) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsVillager(villager))
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
         const B_IS_AIR = buyBItem.sameItem(CustomTrade.AIR_ITEM);
         const recipe = CustomTrade.allocateRecipeTag(
@@ -82,7 +82,7 @@ export namespace RecipesMgmt {
         sellItem: ItemStack,
         destroy: boolean = true
     ) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsVillager(villager))
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
         const recipe = CustomTrade.allocateRecipeTag(
             buyAItem, //buyA
@@ -111,7 +111,10 @@ export namespace RecipesMgmt {
     }
 
     export function removeAllRecipes(villager: Actor) {
-        if (!villager.ctxbase.isVaild() || CustomTrade.IsVillager(villager)) {
+        if (
+            !villager.ctxbase.isVaild() ||
+            CustomTrade.IsValidTrader(villager)
+        ) {
             const villTag = villager.save();
             villTag.Offers.Recipes = [];
             villager.load(villTag);

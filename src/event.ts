@@ -32,7 +32,7 @@ events
 
             const entity = MCLEVEL.getRuntimeEntity(data.runtimeId, false);
             if (!entity) return;
-            if (CustomTrade.IsVillager(entity)) {
+            if (CustomTrade.IsValidTrader(entity)) {
                 const event = new VillagerInteractEvent(
                     player,
                     entity,
