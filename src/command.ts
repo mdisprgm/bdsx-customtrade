@@ -53,25 +53,23 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     Vec3.construct(villPos)
                 )
             );
-            player.sendMessage(
-                CustomTrade.Translate(
-                    "editingTarget.selected",
-                    villPos.x.toFixed(2),
-                    villPos.y.toFixed(2),
-                    villPos.z.toFixed(2)
-                )
+            CustomTrade.SendTranslated(
+                player,
+                "editingTarget.selected",
+                villPos.x.toFixed(2),
+                villPos.y.toFixed(2),
+                villPos.z.toFixed(2)
             );
         } else {
             if (EditingTargets.has(ni)) {
                 const pos = EditingTargets.get(ni)!.pos;
                 EditingTargets.delete(ni);
-                player.sendMessage(
-                    CustomTrade.Translate(
-                        "editingTarget.unselected",
-                        pos.x.toFixed(2),
-                        pos.y.toFixed(2),
-                        pos.z.toFixed(2)
-                    )
+                CustomTrade.SendTranslated(
+                    player,
+                    "editingTarget.unselected",
+                    pos.x.toFixed(2),
+                    pos.y.toFixed(2),
+                    pos.z.toFixed(2)
                 );
             }
         }
