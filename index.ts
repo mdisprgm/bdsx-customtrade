@@ -155,6 +155,17 @@ export namespace CustomTrade {
     }
     export const AIR_ITEM = ItemStack.constructWith("minecraft:air", 1);
 
+    /**
+     * @param item Item to check
+     * @param destroy If the Item will be destructed
+     * @returns If the Item is the `minecraft:air`
+     */
+    export function IsAir(item: ItemStack, destroy: boolean = true): boolean {
+        const isAir = item.sameItem(AIR_ITEM);
+        if (destroy) item.destruct();
+        return isAir;
+    }
+
     export const onVillagerInteract = new Event<
         (event: VillagerInteractEvent) => void | CANCEL
     >();
