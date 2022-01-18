@@ -85,17 +85,31 @@ export namespace CustomTrade {
     export function IsVillager(entity: Actor) {
         return entity.getIdentifier() === VILLAGER;
     }
+    /**
+     *
+     * @param buyItemA buyA
+     * @param priceMultiplierA multiplier for buyA
+     * @param buyItemB buyB
+     * @param priceMultiplierB multiplier for buyB
+     * @param sellItem sell item
+     * @param demand demand for the item
+     * @param traderExp trader exp
+     * @param maxUses max of uses
+     * @param tier tier of the recipe
+     * @param destroy wheter destroy the `ItemStack` instances in parameters
+     * @returns allocated recipe tag
+     */
     export function allocateRecipeTag(
         buyItemA: ItemStack,
         priceMultiplierA: number,
         buyItemB: ItemStack | null,
         priceMultiplierB: number | null,
-        destroy: boolean,
         sellItem: ItemStack,
         demand: number = RECIPE_DEFAULT_DEMAND,
         traderExp: number = RECIPE_DEFAULT_TRADER_EXP,
         maxUses: number = RECIPE_MAX_USES,
-        tier: number = RECIPE_DEFAULT_TIER
+        tier: number = RECIPE_DEFAULT_TIER,
+        destroy: boolean = true
     ): Tag {
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 

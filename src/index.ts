@@ -55,12 +55,12 @@ export namespace RecipesMgmt {
             B_IS_AIR
                 ? CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER
                 : priceMultiplierB, //priceMultiplierB
-            destroy, //destroy parameters ItemStack
             sellItem,
             demand,
             traderExp, //trade reward Exp
             maxUses, //max uses
-            tier //tier
+            tier, //tier
+            destroy //destroy parameters ItemStack
         );
 
         const villTag = villager.save();
@@ -89,12 +89,12 @@ export namespace RecipesMgmt {
             CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierA
             buyBItem.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItem,
             CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierB
-            true, //destroy parameters ItemStack
             sellItem,
             CustomTrade.RECIPE_DEFAULT_DEMAND,
             CustomTrade.RECIPE_DEFAULT_TRADER_EXP, //trade reward Exp
             CustomTrade.RECIPE_MAX_USES, //max uses
-            CustomTrade.RECIPE_DEFAULT_TIER //tier
+            CustomTrade.RECIPE_DEFAULT_TIER, //tier
+            true //destroy parameters ItemStack
         );
 
         const villTag = villager.save();
