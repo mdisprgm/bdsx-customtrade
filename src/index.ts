@@ -47,7 +47,7 @@ export namespace RecipesMgmt {
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
-        const B_IS_AIR = buyBItem.sameItem(CustomTrade.AIR_ITEM);
+        const B_IS_AIR = CustomTrade.IsAir(buyBItem);
         const recipe = CustomTrade.allocateRecipeTag(
             buyAItem, //buyA
             priceMultiplierA, //priceMultiplierA
@@ -84,10 +84,11 @@ export namespace RecipesMgmt {
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
+        const B_IS_AIR = CustomTrade.IsAir(buyBItem);
         const recipe = CustomTrade.allocateRecipeTag(
             buyAItem, //buyA
             CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierA
-            buyBItem.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItem,
+            B_IS_AIR ? null : buyBItem,
             CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierB
             sellItem,
             CustomTrade.RECIPE_DEFAULT_DEMAND,
