@@ -1,4 +1,5 @@
-import { command } from "bdsx/command";
+import { Actor, ActorUniqueID } from "bdsx/bds/actor";
+import { Vec3 } from "bdsx/bds/blockpos";
 import {
     ActorCommandSelector,
     CommandItem,
@@ -10,15 +11,57 @@ import {
 } from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { Actor, ActorUniqueID } from "bdsx/bds/actor";
+import { PlayerPermission, ServerPlayer } from "bdsx/bds/player";
+import { command } from "bdsx/command";
+import { CANCEL } from "bdsx/common";
+import { events } from "bdsx/event";
+import { float32_t, int32_t } from "bdsx/nativetype";
+import { RecipesMgmt } from ".";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
-import { PlayerPermission, ServerPlayer } from "bdsx/bds/player";
-import { CANCEL } from "bdsx/common";
-import { float32_t, int32_t } from "bdsx/nativetype";
-import { Vec3 } from "bdsx/bds/blockpos";
-import { RecipesMgmt } from ".";
-import { events } from "bdsx/event";
+
+namespace TraderCommand {
+    export function assertHasTargets(player: ServerPlayer): number {
+        const count = HasTargets(player);
+        if (count) {
+            return count;
+        } else {
+            CustomTrade.SendTranslated(
+                player,
+                "command.addRecipe.error.no_targets"
+            );
+            return 0;
+        }
+    }
+    export function dynamicAddRecipeOutput(
+        player: ServerPlayer,
+        buyA: ItemStack,
+        buyB: ItemStack,
+        sell: ItemStack
+    ) {
+        if (CustomTrade.IsAir(buyB, false)) {
+            CustomTrade.SendTranslated(
+                player,
+                "addRecipe.success",
+                `${buyA.getName()}`,
+                `${buyA.getAmount()}`,
+                `${sell.getName()}`,
+                `${sell.getAmount()}`
+            );
+        } else {
+            CustomTrade.SendTranslated(
+                player,
+                "addRecipe.buyB.success",
+                `${buyA.getName()}`,
+                `${buyA.getAmount()}`,
+                `${buyB.getName()}`,
+                `${buyB.getAmount()}`,
+                `${sell.getName()}`,
+                `${sell.getAmount()}`
+            );
+        }
+    }
+}
 
 const cmd_trader = command.register(
     "custom_trader",
@@ -150,6 +193,16 @@ cmd_trader.overload(
     }
 );
 
+//infinite health, zero movement speed
+cmd_trader.overload((p, o, op) => {
+    const player = o.getEntity();
+    if (!player?.isPlayer()) return;
+    if (!TraderCommand.assertHasTargets(player)) return;
+
+    const targets = GetTargets(player);
+    if (!targets) return;
+}, {});
+
 const CommandRecipeOption = command.enum("recipe", "recipe");
 
 cmd_trader.overload(
@@ -229,7 +282,7 @@ cmd_trader.overload(
             RecipesMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
         }
 
-        CustomTrade.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+        TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
         buyA.destruct();
         buyB.destruct();
         sell.destruct();
@@ -253,13 +306,8 @@ cmd_trader.overload(
     (p, o, op) => {
         const player = o.getEntity();
         if (!player?.isPlayer()) return;
-        if (!HasTargets(player)) {
-            CustomTrade.SendTranslated(
-                player,
-                "command.addRecipe.error.no_targets"
-            );
-            return;
-        }
+        if (!TraderCommand.assertHasTargets(player)) return;
+
         const targets = GetTargets(player);
         if (!targets) return;
 
@@ -299,7 +347,7 @@ cmd_trader.overload(
             );
         }
 
-        CustomTrade.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+        TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
         buyA.destruct();
         buyB.destruct();
         sell.destruct();
