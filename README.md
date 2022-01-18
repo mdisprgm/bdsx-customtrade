@@ -2,11 +2,11 @@
 
 The plugin for bdsx
 
-# Usage
+# Basic Usage
 
 1. Get wand<br>
    <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/get_wand_originalcmd.png" alt="get_wand_originalcmd" width="350"/>
-   (or alias, `trademgmt`)
+   (or alias, `tradermgmt`)
 
 2. Hit or Right-Click a villager<br>
    <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/main_addrecipe.png" alt="main_addrecipe" width="350"/><br>

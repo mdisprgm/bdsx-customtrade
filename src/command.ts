@@ -25,7 +25,7 @@ const cmd_trader = command.register(
     "custom trader commands",
     CommandPermissionLevel.Operator
 );
-cmd_trader.alias("trademgmt");
+cmd_trader.alias("tradermgmt");
 
 class EditingTarget {
     constructor(public readonly id: ActorUniqueID, public readonly pos: Vec3) {}
