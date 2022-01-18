@@ -151,7 +151,7 @@ events.serverLeave.on(() => {
 
 const CONFIG = loadConfig();
 if (!CONFIG.lang) {
-    throw new Error("`lnag` is undefined in the config");
+    throw new Error("`lang` is undefined in the config");
 }
 const lang = CONFIG.lang;
 const f = fs.readFileSync(
