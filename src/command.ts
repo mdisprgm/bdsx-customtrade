@@ -47,7 +47,7 @@ function GetTargets(from: ServerPlayer): EditingTarget[] | null {
 function DeleteTargets(from: ServerPlayer): boolean {
     const ni = from.getNetworkIdentifier();
     if (EditingTargets.has(ni)) {
-        EditingTargets.delete(ni);
+        EditingTargets.set(ni, []);
     }
     return false;
 }
@@ -149,6 +149,21 @@ cmd_trader.overload(
     }
 );
 
+const CommandRecipeOption = command.enum("recipe", "recipe");
+
+cmd_trader.overload(
+    (p, o, op) => {
+        const player = o.getEntity();
+        if (!player?.isPlayer()) return;
+        DeleteTargets(player);
+        CustomTrade.SendTranslated(player, "command.init_targets.success");
+    },
+    {
+        option: CommandRecipeOption,
+        opt1: command.enum("RecipeInitTargets", "init"),
+    }
+);
+
 cmd_trader.overload(
     (p, o, op) => {
         const player = o.getEntity();
@@ -165,7 +180,7 @@ cmd_trader.overload(
         }
     },
     {
-        option: command.enum("recipe", "recipe"),
+        option: CommandRecipeOption,
         opt1: command.enum("RecipeRemoveAll", "remove_all"),
     }
 );
@@ -212,7 +227,7 @@ cmd_trader.overload(
         }
     },
     {
-        option: command.enum("recipe", "recipe"),
+        option: CommandRecipeOption,
         opt1: command.enum("RecipeAddSim", "add_simple"),
         buyA: CommandItem,
         countA: int32_t,
@@ -275,7 +290,7 @@ cmd_trader.overload(
         }
     },
     {
-        option: command.enum("recipe", "recipe"),
+        option: CommandRecipeOption,
         opt1: command.enum("RecipeAdd", "add"),
         buyA: CommandItem,
         countA: int32_t,
