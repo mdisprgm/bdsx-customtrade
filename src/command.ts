@@ -48,6 +48,7 @@ function DeleteTargets(from: ServerPlayer): boolean {
     const ni = from.getNetworkIdentifier();
     if (EditingTargets.has(ni)) {
         EditingTargets.set(ni, []);
+        return true;
     }
     return false;
 }
