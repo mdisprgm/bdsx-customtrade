@@ -51,6 +51,12 @@ export class VillagerInteractEvent {
 
 export namespace CustomTrade {
     export const RECIPE_MAX_TIER = 4;
+    export const RECIPE_DEFAULT_TIER = 0;
+    export const RECIPE_MAX_USES = 0x7fffffff;
+    export const RECIPE_DEFAULT_TRADER_EXP = 0;
+    export const RECIPE_DEFAULT_PRICE_MULTIPLIER = 0;
+    export const RECIPE_DEFAULT_DEMAND = 0;
+
     export const DIRNAME = __dirname;
 
     const FORMAT_SPECIFIER = "%v";
@@ -86,6 +92,7 @@ export namespace CustomTrade {
         priceMultiplierB: number | null,
         destroy: boolean,
         sellItem: ItemStack,
+        demand: number = 0,
         traderExp: number = 0,
         maxUses: number = 0x7fffffff,
         tier: number = 0
@@ -108,7 +115,7 @@ export namespace CustomTrade {
             buyACount: buyATag.Count,
             buyBCount: NBT.int(0),
             sell: sellTag,
-            demand: NBT.int(0),
+            demand: NBT.int(demand),
             maxUses: maxUses,
             priceMultiplierA: priceMultiplierA,
             priceMultiplierB: NBT.float(0),

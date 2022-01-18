@@ -32,6 +32,49 @@ namespace OpenTo {
 }
 
 export namespace RecipesMgmt {
+    export function addRecipe(
+        villager: Actor,
+        buyAItem: ItemStack,
+        priceMultiplierA: number,
+        buyBItem: ItemStack,
+        priceMultiplierB: number,
+        sellItem: ItemStack,
+        demand: number = CustomTrade.RECIPE_DEFAULT_DEMAND,
+        traderExp: number = CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
+        maxUses: number = CustomTrade.RECIPE_MAX_USES /*MAX OF INT32 */,
+        tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
+        destroy: boolean = true
+    ) {
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsVillager(villager))
+            return;
+        const B_IS_AIR = buyBItem.sameItem(CustomTrade.AIR_ITEM);
+        const recipe = CustomTrade.allocateRecipeTag(
+            buyAItem, //buyA
+            priceMultiplierA, //priceMultiplierA
+            B_IS_AIR ? null : buyBItem,
+            B_IS_AIR
+                ? CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER
+                : priceMultiplierB, //priceMultiplierB
+            destroy, //destroy parameters ItemStack
+            sellItem,
+            demand,
+            traderExp, //trade reward Exp
+            maxUses, //max uses
+            tier //tier
+        );
+
+        const villTag = villager.save();
+        const list = [recipe];
+        villTag.Offers.Recipes.push(list[0]);
+        villager.load(villTag);
+        recipe.dispose();
+
+        if (destroy) {
+            buyAItem.destruct();
+            buyBItem.destruct();
+            sellItem.destruct();
+        }
+    }
     export function addSimpleRecipe(
         villager: Actor,
         buyAItem: ItemStack,
@@ -43,14 +86,15 @@ export namespace RecipesMgmt {
             return;
         const recipe = CustomTrade.allocateRecipeTag(
             buyAItem, //buyA
-            0, //priceMultiplierA
+            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierA
             buyBItem.sameItem(CustomTrade.AIR_ITEM) ? null : buyBItem,
-            0, //priceMultiplierB
+            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierB
             true, //destroy parameters ItemStack
             sellItem,
-            0, //tier
-            2147483647, //max uses
-            0 //trade reward Exp
+            CustomTrade.RECIPE_DEFAULT_DEMAND,
+            CustomTrade.RECIPE_DEFAULT_TRADER_EXP, //trade reward Exp
+            CustomTrade.RECIPE_MAX_USES, //max uses
+            CustomTrade.RECIPE_DEFAULT_TIER //tier
         );
 
         const villTag = villager.save();
