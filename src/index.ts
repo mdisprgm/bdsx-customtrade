@@ -167,27 +167,12 @@ CustomTrade.onVillagerInteract.on((ev) => {
                         sell,
                         false
                     );
-                    if (CustomTrade.IsAir(buyB, false)) {
-                        CustomTrade.SendTranslated(
-                            player,
-                            "addRecipe.success",
-                            `${buyA.getName()}`,
-                            `${buyA.getAmount()}`,
-                            `${sell.getName()}`,
-                            `${sell.getAmount()}`
-                        );
-                    } else {
-                        CustomTrade.SendTranslated(
-                            player,
-                            "addRecipe.buyB.success",
-                            `${buyA.getName()}`,
-                            `${buyA.getAmount()}`,
-                            `${buyB.getName()}`,
-                            `${buyB.getAmount()}`,
-                            `${sell.getName()}`,
-                            `${sell.getAmount()}`
-                        );
-                    }
+                    CustomTrade.dynamicAddRecipeOutput(
+                        player,
+                        buyA,
+                        buyB,
+                        sell
+                    );
                     buyA.destruct();
                     buyB.destruct();
                     sell.destruct();

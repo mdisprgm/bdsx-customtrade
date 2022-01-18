@@ -72,6 +72,35 @@ export namespace CustomTrade {
         player.sendMessage(message);
     }
 
+    export function dynamicAddRecipeOutput(
+        player: ServerPlayer,
+        buyA: ItemStack,
+        buyB: ItemStack,
+        sell: ItemStack
+    ) {
+        if (IsAir(buyB, false)) {
+            SendTranslated(
+                player,
+                "addRecipe.success",
+                `${buyA.getName()}`,
+                `${buyA.getAmount()}`,
+                `${sell.getName()}`,
+                `${sell.getAmount()}`
+            );
+        } else {
+            SendTranslated(
+                player,
+                "addRecipe.buyB.success",
+                `${buyA.getName()}`,
+                `${buyA.getAmount()}`,
+                `${buyB.getName()}`,
+                `${buyB.getAmount()}`,
+                `${sell.getName()}`,
+                `${sell.getAmount()}`
+            );
+        }
+    }
+
     export const hacker = ProcHacker.load(
         path.join(CustomTrade.DIRNAME, "./hacker.ini"),
         ["Item::setIsGlint", "Player::setCarriedItem"],

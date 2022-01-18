@@ -176,8 +176,8 @@ cmd_trader.overload(
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
             RecipesMgmt.removeAllRecipes(villager);
-            CustomTrade.SendTranslated(player, "command.removeAll.success");
         }
+        CustomTrade.SendTranslated(player, "command.removeAll.success");
     },
     {
         option: CommandRecipeOption,
@@ -204,27 +204,34 @@ cmd_trader.overload(
         const targets = GetTargets(player);
         if (!targets) return;
 
+        const buyA = recreateItemInstance(
+            p.buyA.createInstance(1),
+            p.countA,
+            p.dataA
+        );
+        const buyB = recreateItemInstance(
+            p.buyB.createInstance(1),
+            p.countB,
+            p.dataB
+        );
+        const sell = recreateItemInstance(
+            p.sell.createInstance(1),
+            p.countSell,
+            p.dataSell
+        );
+
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
 
-            const buyA = recreateItemInstance(
-                p.buyA.createInstance(1),
-                p.countA,
-                p.dataA
-            );
-            const buyB = recreateItemInstance(
-                p.buyB.createInstance(1),
-                p.countB,
-                p.dataB
-            );
-            const sell = recreateItemInstance(
-                p.sell.createInstance(1),
-                p.countSell,
-                p.dataSell
-            );
-            RecipesMgmt.addSimpleRecipe(villager, buyA, buyB, sell, true);
+            //items are destructed here
+            RecipesMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
         }
+
+        CustomTrade.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+        buyA.destruct();
+        buyB.destruct();
+        sell.destruct();
     },
     {
         option: CommandRecipeOption,
@@ -255,25 +262,27 @@ cmd_trader.overload(
         const targets = GetTargets(player);
         if (!targets) return;
 
+        const buyA = recreateItemInstance(
+            p.buyA.createInstance(1),
+            p.countA,
+            p.dataA
+        );
+        const buyB = recreateItemInstance(
+            p.buyB.createInstance(1),
+            p.countB,
+            p.dataB
+        );
+        const sell = recreateItemInstance(
+            p.sell.createInstance(1),
+            p.countSell,
+            p.dataSell
+        );
+
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
 
-            const buyA = recreateItemInstance(
-                p.buyA.createInstance(1),
-                p.countA,
-                p.dataA
-            );
-            const buyB = recreateItemInstance(
-                p.buyB.createInstance(1),
-                p.countB,
-                p.dataB
-            );
-            const sell = recreateItemInstance(
-                p.sell.createInstance(1),
-                p.countSell,
-                p.dataSell
-            );
+            //items are destructed here
             RecipesMgmt.addRecipe(
                 villager,
                 buyA,
@@ -285,9 +294,14 @@ cmd_trader.overload(
                 p.traderExp,
                 p.maxUses,
                 p.tier,
-                true
+                false
             );
         }
+
+        CustomTrade.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+        buyA.destruct();
+        buyB.destruct();
+        sell.destruct();
     },
     {
         option: CommandRecipeOption,
