@@ -20,7 +20,7 @@ import { RecipesMgmt } from ".";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
 
-namespace TraderCommand {
+export namespace TraderCommand {
     export function assertHasTargets(player: ServerPlayer): number {
         const count = HasTargets(player);
         if (count) {
