@@ -1,10 +1,25 @@
+import { Actor } from "bdsx/bds/actor";
+import {
+    ItemStack,
+    ItemUseOnActorInventoryTransaction,
+} from "bdsx/bds/inventory";
 import { MinecraftPacketIds } from "bdsx/bds/packetids";
+import { ServerPlayer } from "bdsx/bds/player";
 import { serverInstance } from "bdsx/bds/server";
 import { CANCEL } from "bdsx/common";
 import { events } from "bdsx/event";
-import { CustomTrade, VillagerInteractEvent } from "..";
+import { CustomTrade } from "..";
 
 const MCLEVEL = serverInstance.minecraft.getLevel();
+
+export class VillagerInteractEvent {
+    constructor(
+        public player: ServerPlayer,
+        public villager: Actor,
+        public item: ItemStack,
+        public transaction: ItemUseOnActorInventoryTransaction
+    ) {}
+}
 
 events
     .packetBefore(MinecraftPacketIds.InventoryTransaction)
@@ -21,7 +36,8 @@ events
                 const event = new VillagerInteractEvent(
                     player,
                     entity,
-                    player.getMainhandSlot()
+                    player.getMainhandSlot(),
+                    data
                 );
                 const canceled =
                     CustomTrade.onVillagerInteract.fire(event) === CANCEL;

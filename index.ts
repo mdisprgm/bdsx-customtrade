@@ -14,6 +14,7 @@ import fs = require("fs");
 import ini = require("ini");
 
 import "bdsx/bds/implements";
+import { VillagerInteractEvent } from "./src/event";
 
 console.log("[CustomTrade] allocated");
 
@@ -39,14 +40,6 @@ function loadConfig() {
     } catch (err) {
         throw err;
     }
-}
-
-export class VillagerInteractEvent {
-    constructor(
-        public player: ServerPlayer,
-        public villager: Actor,
-        public item: ItemStack
-    ) {}
 }
 
 export namespace CustomTrade {
