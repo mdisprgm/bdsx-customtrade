@@ -116,7 +116,6 @@ cmd_trader.overload(
             const att = tag.Attributes.find(
                 (v: any) => v.Name === "minecraft:movement"
             );
-            console.log(att.Current);
             att.Current = NBT.float(p.value);
             actor.load(tag);
         }
