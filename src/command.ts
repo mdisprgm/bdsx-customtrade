@@ -1,14 +1,18 @@
 import { command } from "bdsx/command";
 import { ActorCommandSelector, CommandPermissionLevel } from "bdsx/bds/command";
-import { ItemStack } from "bdsx/bds/inventory";
+import {
+    ItemStack,
+    ItemUseOnActorInventoryTransaction,
+} from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { ActorUniqueID } from "bdsx/bds/actor";
+import { Actor, ActorUniqueID } from "bdsx/bds/actor";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
 import { PlayerPermission } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
 import { float32_t } from "bdsx/nativetype";
+import { Vec3 } from "bdsx/bds/blockpos";
 
 const cmd_trader = command.register(
     "custom_trader",
@@ -17,32 +21,60 @@ const cmd_trader = command.register(
 );
 cmd_trader.alias("trademgmt");
 
-export const EditingTargets = new Map<NetworkIdentifier, ActorUniqueID>();
+class EditingTarget {
+    constructor(public readonly id: ActorUniqueID, public readonly pos: Vec3) {}
+}
+
+export const EditingTargets = new Map<NetworkIdentifier, EditingTarget>();
 
 CustomTrade.onVillagerInteract.on((ev) => {
     const player = ev.player;
     const villager = ev.villager;
-    if (!CustomTrade.IsVillager(villager)) return;
+    const villPos = villager.getPosition();
+
+    const ni = player.getNetworkIdentifier();
+    if (!CustomTrade.IsValidTrader(villager)) return;
     const item = player.getMainhandSlot();
     if (!CustomTrade.IsWand(item)) return;
     if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
         Player$setCarriedItem(player, CustomTrade.AIR_ITEM);
         return;
     }
+
     if (player.isSneaking()) {
-        EditingTargets.set(
-            player.getNetworkIdentifier(),
-            villager.getUniqueIdBin()
-        );
-        const villPos = ev.villager.getPosition();
-        player.sendMessage(
-            CustomTrade.Translate(
-                "editingTarget.selected",
-                villPos.x.toFixed(2),
-                villPos.y.toFixed(2),
-                villPos.z.toFixed(2)
-            )
-        );
+        if (
+            ev.transaction.actionType !==
+            ItemUseOnActorInventoryTransaction.ActionType.Attack
+        ) {
+            EditingTargets.set(
+                ni,
+                new EditingTarget(
+                    villager.getUniqueIdBin(),
+                    Vec3.construct(villPos)
+                )
+            );
+            player.sendMessage(
+                CustomTrade.Translate(
+                    "editingTarget.selected",
+                    villPos.x.toFixed(2),
+                    villPos.y.toFixed(2),
+                    villPos.z.toFixed(2)
+                )
+            );
+        } else {
+            if (EditingTargets.has(ni)) {
+                const pos = EditingTargets.get(ni)!.pos;
+                EditingTargets.delete(ni);
+                player.sendMessage(
+                    CustomTrade.Translate(
+                        "editingTarget.unselected",
+                        pos.x.toFixed(2),
+                        pos.y.toFixed(2),
+                        pos.z.toFixed(2)
+                    )
+                );
+            }
+        }
         return CANCEL;
     }
 });
