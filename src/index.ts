@@ -167,7 +167,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                         sell,
                         false
                     );
-                    CustomTrade.dynamicAddRecipeOutput(
+                    TraderCommand.dynamicAddRecipeOutput(
                         player,
                         buyA,
                         buyB,
