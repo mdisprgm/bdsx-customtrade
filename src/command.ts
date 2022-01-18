@@ -6,7 +6,7 @@ import {
 } from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { Actor, ActorUniqueID } from "bdsx/bds/actor";
+import { ActorUniqueID } from "bdsx/bds/actor";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
 import { PlayerPermission } from "bdsx/bds/player";
@@ -103,7 +103,7 @@ cmd_trader.overload(
         wandTag.dispose();
     },
     {
-        value: command.enum("CustomTradeWand", "wand"),
+        option: command.enum("CustomTradeWand", "wand"),
     }
 );
 
@@ -121,7 +121,7 @@ cmd_trader.overload(
         }
     },
     {
-        noai: command.enum("Speed", "speed"),
+        option: command.enum("Speed", "speed"),
         targets: ActorCommandSelector,
         value: float32_t,
     }
