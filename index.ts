@@ -86,9 +86,9 @@ export namespace CustomTrade {
         priceMultiplierB: number | null,
         destroy: boolean,
         sellItem: ItemStack,
-        tier: number,
-        maxUses: number,
-        traderExp: number = -1
+        traderExp: number = 0,
+        maxUses: number = 0x7fffffff,
+        tier: number = 0
     ): Tag {
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
