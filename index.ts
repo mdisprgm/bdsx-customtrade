@@ -1,20 +1,19 @@
-import { events } from "bdsx/event";
-import { bedrockServer } from "bdsx/launcher";
-import { ProcHacker } from "bdsx/prochacker";
-import { UNDNAME_NAME_ONLY } from "bdsx/dbghelp";
-import { Event } from "bdsx/eventtarget";
-import { CANCEL } from "bdsx/common";
-import { ServerPlayer } from "bdsx/bds/player";
 import { Actor } from "bdsx/bds/actor";
+import "bdsx/bds/implements";
 import { ItemStack } from "bdsx/bds/inventory";
 import { NBT, Tag } from "bdsx/bds/nbt";
+import { ServerPlayer } from "bdsx/bds/player";
+import { CANCEL } from "bdsx/common";
+import { UNDNAME_NAME_ONLY } from "bdsx/dbghelp";
+import { events } from "bdsx/event";
+import { Event } from "bdsx/eventtarget";
+import { bedrockServer } from "bdsx/launcher";
+import { ProcHacker } from "bdsx/prochacker";
+import { VillagerInteractEvent } from "./src/event";
 
 import path = require("path");
 import fs = require("fs");
 import ini = require("ini");
-
-import "bdsx/bds/implements";
-import { VillagerInteractEvent } from "./src/event";
 
 console.log("[CustomTrade] allocated");
 
@@ -63,6 +62,14 @@ export namespace CustomTrade {
             str = str.replace(FORMAT_SPECIFIER, args[i++]);
         }
         return str;
+    }
+    export function SendTranslated(
+        player: ServerPlayer,
+        key: string,
+        ...args: any[]
+    ) {
+        const message = Translate(key, ...args);
+        player.sendMessage(message);
     }
 
     export const hacker = ProcHacker.load(
