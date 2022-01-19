@@ -229,7 +229,6 @@ cmd_trader.overload(
         CustomTrade.SendTranslated(player, "command.init_targets.success");
     },
     {
-        option: CommandRecipeOption,
         opt1: command.enum("RecipeInitTargets", "init"),
     }
 );
