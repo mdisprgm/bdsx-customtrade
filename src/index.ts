@@ -276,6 +276,10 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     if (!confirmed) return;
 
                     TraderMgmt.removeAllRecipes(villager);
+                    CustomTrade.SendTranslated(
+                        player,
+                        "removeAllRecipes.success"
+                    );
                 });
             }
             if (resp === EditorWindow.MainMenuChoices.SetProperties) {
