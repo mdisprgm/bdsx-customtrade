@@ -25,7 +25,7 @@ namespace OpenTo {
     export async function AddSimpleRecipe(
         target: NetworkIdentifier
     ): Promise<any[] | null> {
-        return await Form.sendTo(target, EditorWindow.AddRecipe);
+        return await Form.sendTo(target, EditorWindow.AddSimpleRecipe);
     }
 
     export async function RemoveAllRecipes(
@@ -222,7 +222,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
     if (!player.isSneaking()) {
         OpenTo.ChooseMenu(ni).then((resp) => {
             if (resp === null) return;
-            if (resp === EditorWindow.MainMenuChoices.AddRecipe) {
+            if (resp === EditorWindow.MainMenuChoices.AddSimpleRecipe) {
                 OpenTo.AddSimpleRecipe(ni).then((resp) => {
                     if (resp === null) return;
                     const [

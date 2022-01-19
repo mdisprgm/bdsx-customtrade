@@ -5,7 +5,7 @@ import { CustomTrade } from "..";
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
 export namespace EditorWindow {
     export enum MainMenuChoices {
-        AddRecipe = 0,
+        AddSimpleRecipe = 0,
         RemoveAllRecipes = 1,
         SetProperties = 2,
     }
@@ -52,39 +52,39 @@ export namespace EditorWindow {
             },
         ],
     };
-    export const AddRecipe: FormDataCustom = {
+    export const AddSimpleRecipe: FormDataCustom = {
         type: "custom_form",
         title: VILLAGER_EDITOR_TITLE,
         content: [
             {
                 type: "input",
-                text: CustomTrade.Translate("addRecipe.input.buyA.itemName"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.buyA.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addRecipe.input.buyA.count"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.buyA.count"),
                 max: 64,
                 min: 1,
                 default: 1,
             },
             {
                 type: "input",
-                text: CustomTrade.Translate("addRecipe.input.buyB.itemName"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.buyB.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addRecipe.input.buyB.count"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.buyB.count"),
                 max: 64,
                 min: 1,
                 default: 1,
             },
             {
                 type: "input",
-                text: CustomTrade.Translate("addRecipe.input.sell.itemName"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.sell.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addRecipe.input.sell.count"),
+                text: CustomTrade.Translate("addSimpleRecipe.input.sell.count"),
                 max: 64,
                 min: 1,
                 default: 1,
