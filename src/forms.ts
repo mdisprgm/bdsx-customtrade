@@ -6,6 +6,7 @@ export namespace EditorWindow {
     export enum MainMenuChoices {
         AddRecipe = 0,
         RemoveAllRecipes = 1,
+        SetInvincibility,
     }
 
     export const ChooseMenu: FormDataSimple = {
@@ -25,6 +26,13 @@ export namespace EditorWindow {
                 image: {
                     type: "path",
                     data: "textures/blocks/barrier",
+                },
+            },
+            {
+                text: CustomTrade.Translate("chooseMenu.SetInvincibility"),
+                image: {
+                    type: "path",
+                    data: "textures/items/turtle_helmet",
                 },
             },
         ],
@@ -79,6 +87,22 @@ export namespace EditorWindow {
                 max: 64,
                 min: 1,
                 default: 1,
+            },
+        ],
+    };
+    export const SetInvincibility: FormDataCustom = {
+        type: "custom_form",
+        title: VILLAGER_EDITOR_TITLE,
+        content: [
+            {
+                type: "toggle",
+                text: CustomTrade.Translate("setInvc.passive.nohurt"),
+                default: false,
+            },
+            {
+                type: "toggle",
+                text: CustomTrade.Translate("setInvc.passive.nomovement"),
+                default: false,
             },
         ],
     };

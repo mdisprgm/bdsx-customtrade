@@ -10,6 +10,11 @@ import { CANCEL } from "bdsx/common";
 import { CustomTrade } from "..";
 import { EditorWindow } from "./forms";
 import { Player$setCarriedItem } from "./hacker";
+import { TraderCommand } from "./command";
+
+import { SNBT } from "@bdsx/snbt";
+import { events } from "bdsx/event";
+import { NBT } from "bdsx/bds/nbt";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -29,9 +34,19 @@ namespace OpenTo {
     ): Promise<any[] | null> {
         return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
     }
-}
 
-export namespace RecipesMgmt {
+    export async function SetInvincibility(target: NetworkIdentifier) {
+        return await Form.sendTo(target, EditorWindow.SetInvincibility);
+    }
+}
+export namespace TraderMgmt {
+    export namespace Invincbility {
+        export const NoHurt = "Trader_NoHurt";
+        export const NoMovement = "Trader_NoMovement";
+
+        export const MOVEMENT_SLOWED = 0;
+        export const MOVEMENT_NORMAL = 0.5;
+    }
     export function addRecipe(
         villager: Actor,
         buyAItem: ItemStack,
@@ -112,16 +127,54 @@ export namespace RecipesMgmt {
     }
 
     export function removeAllRecipes(villager: Actor) {
-        if (
-            !villager.ctxbase.isVaild() ||
-            CustomTrade.IsValidTrader(villager)
-        ) {
-            const villTag = villager.save();
-            villTag.Offers.Recipes = [];
-            villager.load(villTag);
-        }
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+            return;
+        const villTag = villager.save();
+        villTag.Offers.Recipes = [];
+        villager.load(villTag);
+    }
+
+    function getAttribute(entity: Actor, key: string) {
+        if (!CustomTrade.IsValidTrader(entity)) return;
+        const villTag = entity.save();
+        const attribute = villTag.Attributes.find((v: any) => {
+            return v.Name === key;
+        });
+        return attribute;
+    }
+    function getAttributes(entity: Actor) {
+        if (!CustomTrade.IsValidTrader(entity)) return;
+        const villTag = entity.save();
+        return villTag.Attributes;
+    }
+    export function setInvincibility(
+        villager: Actor,
+        nohurt: boolean,
+        nomovement: boolean
+    ) {
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+            return;
+        if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
+        else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
+
+        const villTag = villager.save();
+        const movement = villTag.Attributes.find((v: any) => {
+            return v.Name === "minecraft:movement";
+        });
+
+        if (nomovement) {
+            movement.Current = TraderMgmt.Invincbility.MOVEMENT_SLOWED;
+        } else movement.Current = TraderMgmt.Invincbility.MOVEMENT_NORMAL;
+        villager.load(villTag);
     }
 }
+
+//Invincibiltiy
+events.entityHurt.on((ev) => {
+    if (ev.entity.hasTag(TraderMgmt.Invincbility.NoHurt)) {
+        return CANCEL;
+    }
+});
 
 CustomTrade.onVillagerInteract.on((ev) => {
     const player = ev.player;
@@ -160,7 +213,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                         sellItemName,
                         sellCount
                     );
-                    RecipesMgmt.addSimpleRecipe(
+                    TraderMgmt.addSimpleRecipe(
                         villager,
                         buyA,
                         buyB,
@@ -184,7 +237,14 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     const [, confirmed] = resp;
                     if (!confirmed) return;
 
-                    RecipesMgmt.removeAllRecipes(villager);
+                    TraderMgmt.removeAllRecipes(villager);
+                });
+            }
+            if (resp === EditorWindow.MainMenuChoices.SetInvincibility) {
+                OpenTo.SetInvincibility(ni).then((resp) => {
+                    if (resp === null) return;
+                    const [NoHurt, NoMovement] = resp;
+                    TraderMgmt.setInvincibility(villager, NoHurt, NoMovement);
                 });
             }
         });
