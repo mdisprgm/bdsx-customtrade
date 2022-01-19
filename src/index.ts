@@ -11,11 +11,9 @@ import { CustomTrade } from "..";
 import { EditorWindow } from "./forms";
 import { Player$setCarriedItem } from "./hacker";
 import { TraderCommand } from "./command";
-
-import { SNBT } from "@bdsx/snbt";
 import { events } from "bdsx/event";
+
 import { NBT } from "bdsx/bds/nbt";
-import { HurtArmorPacket } from "bdsx/bds/packets";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -36,19 +34,39 @@ namespace OpenTo {
         return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
     }
 
-    export async function SetInvincibility(target: NetworkIdentifier) {
-        return await Form.sendTo(target, EditorWindow.SetInvincibility);
+    export async function SetProperties(
+        target: NetworkIdentifier,
+        prop: TraderMgmt.Properties
+    ) {
+        return await Form.sendTo(
+            target,
+            EditorWindow.createSetProperties(prop)
+        );
     }
 }
 export namespace TraderMgmt {
+    export class Properties {
+        name: string;
+        noMovement: boolean;
+        noHurt: boolean;
+        constructor(name: string, noHurt: boolean, noMovement: boolean) {
+            this.name = name;
+            this.noHurt = noHurt;
+            this.noMovement = noMovement;
+        }
+    }
     export namespace Invincbility {
-        export const ATTR_KEY_MOVEMENT = "minecraft:movement";
-        export const ATTR_KEY_HEALTH = "minecraft:health";
         export const NoHurt = "Trader_NoHurt";
         export const NoMovement = "Trader_NoMovement";
 
+        export const ATTR_KEY_MOVEMENT = "minecraft:movement";
+        export const ATTR_KEY_HEALTH = "minecraft:health";
+
         export const MOVEMENT_SLOWED = 0;
         export const MOVEMENT_NORMAL = 0.5;
+
+        export const NBT_MOVEMENT_SLOWED = NBT.float(MOVEMENT_SLOWED);
+        export const NBT_MOVEMENT_NORMAL = NBT.float(MOVEMENT_NORMAL);
     }
     export function addRecipe(
         villager: Actor,
@@ -166,11 +184,11 @@ export namespace TraderMgmt {
         });
 
         if (nomovement) {
-            movement.Current = TraderMgmt.Invincbility.MOVEMENT_SLOWED;
-        } else movement.Current = TraderMgmt.Invincbility.MOVEMENT_NORMAL;
+            movement.Current = TraderMgmt.Invincbility.NBT_MOVEMENT_SLOWED;
+        } else movement.Current = TraderMgmt.Invincbility.NBT_MOVEMENT_NORMAL;
         villager.load(villTag);
     }
-    export function getInvincibility(villager: Actor): Record<string, boolean> {
+    export function getInvincibility(villager: Actor) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return { NoHurt: false, NoMovement: false };
         return {
@@ -255,11 +273,21 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     TraderMgmt.removeAllRecipes(villager);
                 });
             }
-            if (resp === EditorWindow.MainMenuChoices.SetInvincibility) {
-                OpenTo.SetInvincibility(ni).then((resp) => {
+            if (resp === EditorWindow.MainMenuChoices.SetProperties) {
+                const invc = TraderMgmt.getInvincibility(villager);
+                OpenTo.SetProperties(
+                    ni,
+                    new TraderMgmt.Properties(
+                        villager.getName(),
+                        invc.NoHurt,
+                        invc.NoMovement
+                    )
+                ).then((resp) => {
                     if (resp === null) return;
-                    const [NoHurt, NoMovement] = resp;
+                    const [name, NoHurt, NoMovement] = resp;
+                    if (!villager.ctxbase.isVaild()) return;
                     TraderMgmt.setInvincibility(villager, NoHurt, NoMovement);
+                    villager.setName(name);
                 });
             }
         });

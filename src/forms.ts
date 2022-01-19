@@ -1,4 +1,5 @@
 import { FormDataCustom, FormDataSimple } from "bdsx/bds/form";
+import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
@@ -6,7 +7,7 @@ export namespace EditorWindow {
     export enum MainMenuChoices {
         AddRecipe = 0,
         RemoveAllRecipes = 1,
-        SetInvincibility,
+        SetProperties = 2,
     }
 
     export const ChooseMenu: FormDataSimple = {
@@ -90,6 +91,35 @@ export namespace EditorWindow {
             },
         ],
     };
+
+    export function createSetProperties(
+        prop: TraderMgmt.Properties
+    ): FormDataCustom {
+        return {
+            type: "custom_form",
+            title: VILLAGER_EDITOR_TITLE,
+            content: [
+                {
+                    type: "input",
+                    text: CustomTrade.Translate("setProp.entity.name"),
+                    default: prop.name,
+                },
+                {
+                    type: "toggle",
+                    text: CustomTrade.Translate("setInvc.passive.nohurt"),
+                    default: prop.noHurt,
+                },
+                {
+                    type: "toggle",
+                    text: CustomTrade.Translate("setInvc.passive.nomovement"),
+                    default: prop.noMovement,
+                },
+            ],
+        };
+    }
+    /**
+     * @deprecated WILL BE DELETED. Use createSetProperties
+     */
     export const SetInvincibility: FormDataCustom = {
         type: "custom_form",
         title: VILLAGER_EDITOR_TITLE,
