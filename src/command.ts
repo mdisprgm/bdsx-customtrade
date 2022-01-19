@@ -159,6 +159,7 @@ cmd_trader.overload(
             tag: {
                 ...oldTag.tag,
                 IsCustomTradeWand: true,
+                ench: [{ id: NBT.short(-1), lvl: NBT.short(1) }],
             },
         }) as CompoundTag;
         wand.load(wandTag);
