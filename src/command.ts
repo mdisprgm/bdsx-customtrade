@@ -15,7 +15,7 @@ import { PlayerPermission, ServerPlayer } from "bdsx/bds/player";
 import { command } from "bdsx/command";
 import { CANCEL } from "bdsx/common";
 import { events } from "bdsx/event";
-import { bool_t, float32_t, int32_t } from "bdsx/nativetype";
+import { bool_t, CxxString, float32_t, int32_t } from "bdsx/nativetype";
 import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
@@ -208,10 +208,12 @@ cmd_trader.overload(
             if (!entity) return;
 
             TraderMgmt.setInvincibility(entity, p.NoHurt, p.NoMovement);
+            entity.setNameTag(p.Name);
         }
     },
     {
-        option: command.enum("Invincibility", "invincibility", "invc"),
+        option: command.enum("Properties", "prop", "properties"),
+        Name: CxxString,
         NoHurt: bool_t,
         NoMovement: bool_t,
     }
