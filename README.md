@@ -23,9 +23,14 @@ The plugin for bdsx
    <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/addrecipe_result.png" alt="addrecipe_result" width="350"/>
 
 # Changelogs
+
 ### 22.01.18
 
--   Add: more commands
+-   Add: More commands
+
+### 22.01.20
+
+-   Add: Glinted wand
 
 # Tip
 
