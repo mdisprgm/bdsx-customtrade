@@ -15,6 +15,7 @@ import { TraderCommand } from "./command";
 import { SNBT } from "@bdsx/snbt";
 import { events } from "bdsx/event";
 import { NBT } from "bdsx/bds/nbt";
+import { HurtArmorPacket } from "bdsx/bds/packets";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -41,6 +42,8 @@ namespace OpenTo {
 }
 export namespace TraderMgmt {
     export namespace Invincbility {
+        export const ATTR_KEY_MOVEMENT = "minecraft:movement";
+        export const ATTR_KEY_HEALTH = "minecraft:health";
         export const NoHurt = "Trader_NoHurt";
         export const NoMovement = "Trader_NoMovement";
 
@@ -159,13 +162,25 @@ export namespace TraderMgmt {
 
         const villTag = villager.save();
         const movement = villTag.Attributes.find((v: any) => {
-            return v.Name === "minecraft:movement";
+            return v.Name === TraderMgmt.Invincbility.ATTR_KEY_MOVEMENT;
         });
 
         if (nomovement) {
             movement.Current = TraderMgmt.Invincbility.MOVEMENT_SLOWED;
         } else movement.Current = TraderMgmt.Invincbility.MOVEMENT_NORMAL;
         villager.load(villTag);
+    }
+    export function getInvincibility(villager: Actor): Record<string, boolean> {
+        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+            return { NoHurt: false, NoMovement: false };
+        return {
+            NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
+            NoMovement:
+                getAttribute(
+                    villager,
+                    TraderMgmt.Invincbility.ATTR_KEY_MOVEMENT
+                ).Current < TraderMgmt.Invincbility.MOVEMENT_NORMAL,
+        };
     }
 }
 

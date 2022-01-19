@@ -5,6 +5,9 @@ export namespace VillagerTradeAPI {
     export const addRecipe = TraderMgmt.addRecipe;
     export const addSimpleRecipe = TraderMgmt.addSimpleRecipe;
     export const removeAllRecipes = TraderMgmt.removeAllRecipes;
+    export const setInvincibility = TraderMgmt.setInvincibility;
+    export const getInvincibility = TraderMgmt.getInvincibility;
+
     export const allocateRecipeTag = CustomTrade.allocateRecipeTag;
     export const onVillagerInteract = CustomTrade.onVillagerInteract;
 

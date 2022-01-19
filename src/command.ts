@@ -15,8 +15,8 @@ import { PlayerPermission, ServerPlayer } from "bdsx/bds/player";
 import { command } from "bdsx/command";
 import { CANCEL } from "bdsx/common";
 import { events } from "bdsx/event";
-import { float32_t, int32_t } from "bdsx/nativetype";
-import { RecipesMgmt } from ".";
+import { bool_t, float32_t, int32_t } from "bdsx/nativetype";
+import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 import { Player$setCarriedItem } from "./hacker";
 
@@ -194,7 +194,7 @@ cmd_trader.overload(
 );
 
 //infinite health, zero movement speed
-/* cmd_trader.overload(
+cmd_trader.overload(
     (p, o, op) => {
         const player = o.getEntity();
         if (!player?.isPlayer()) return;
@@ -202,9 +202,20 @@ cmd_trader.overload(
 
         const targets = GetTargets(player);
         if (!targets) return;
+
+        for (const target of targets) {
+            const entity = Actor.fromUniqueIdBin(target.id);
+            if (!entity) return;
+
+            TraderMgmt.setInvincibility(entity, p.NoHurt, p.NoMovement);
+        }
     },
-    { option: command.enum("Invincibility", "invincibility", "invc") }
-); */
+    {
+        option: command.enum("Invincibility", "invincibility", "invc"),
+        NoHurt: bool_t,
+        NoMovement: bool_t,
+    }
+);
 
 const CommandRecipeOption = command.enum("recipe", "recipe");
 
@@ -232,7 +243,7 @@ cmd_trader.overload(
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
-            RecipesMgmt.removeAllRecipes(villager);
+            TraderMgmt.removeAllRecipes(villager);
         }
         CustomTrade.SendTranslated(player, "command.removeAll.success");
     },
@@ -282,7 +293,7 @@ cmd_trader.overload(
             if (!villager) continue;
 
             //items are destructed here
-            RecipesMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
+            TraderMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
         }
 
         TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
@@ -335,7 +346,7 @@ cmd_trader.overload(
             if (!villager) continue;
 
             //items are destructed here
-            RecipesMgmt.addRecipe(
+            TraderMgmt.addRecipe(
                 villager,
                 buyA,
                 p.priceMultiA,
