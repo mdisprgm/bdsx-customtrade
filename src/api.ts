@@ -1,10 +1,10 @@
-import { RecipesMgmt } from ".";
+import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 
 export namespace VillagerTradeAPI {
-    export const addRecipe = RecipesMgmt.addRecipe;
-    export const addSimpleRecipe = RecipesMgmt.addSimpleRecipe;
-    export const removeAllRecipes = RecipesMgmt.removeAllRecipes;
+    export const addRecipe = TraderMgmt.addRecipe;
+    export const addSimpleRecipe = TraderMgmt.addSimpleRecipe;
+    export const removeAllRecipes = TraderMgmt.removeAllRecipes;
     export const allocateRecipeTag = CustomTrade.allocateRecipeTag;
     export const onVillagerInteract = CustomTrade.onVillagerInteract;
 
