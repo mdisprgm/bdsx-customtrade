@@ -68,7 +68,7 @@ export namespace TraderMgmt {
         export const NBT_MOVEMENT_SLOWED = NBT.float(MOVEMENT_SLOWED);
         export const NBT_MOVEMENT_NORMAL = NBT.float(MOVEMENT_NORMAL);
     }
-    export function addRecipe(
+    export async function addRecipe(
         villager: Actor,
         buyAItem: ItemStack,
         priceMultiplierA: number,
@@ -100,11 +100,28 @@ export namespace TraderMgmt {
         );
 
         const villTag = villager.save();
-        const list = [recipe];
-        villTag.Offers.Recipes.push(list[0]);
+        villTag.Offers.Recipes.push(recipe);
+
+        villTag.Offers.TierExpRequirements = [
+            {
+                "0": 0,
+            },
+            {
+                "1": 10,
+            },
+            {
+                "2": 70,
+            },
+            {
+                "3": 150,
+            },
+            {
+                "4": 250,
+            },
+        ];
+
         villager.load(villTag);
         recipe.dispose();
-
         if (destroy) {
             buyAItem.destruct();
             buyBItem.destruct();
@@ -120,31 +137,19 @@ export namespace TraderMgmt {
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
-        const B_IS_AIR = CustomTrade.IsAir(buyBItem);
-        const recipe = CustomTrade.allocateRecipeTag(
-            buyAItem, //buyA
-            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierA
-            B_IS_AIR ? null : buyBItem,
-            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER, //priceMultiplierB
+        addRecipe(
+            villager,
+            buyAItem,
+            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER,
+            buyBItem,
+            CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER,
             sellItem,
             CustomTrade.RECIPE_DEFAULT_DEMAND,
-            CustomTrade.RECIPE_DEFAULT_TRADER_EXP, //trade reward Exp
-            CustomTrade.RECIPE_MAX_USES, //max uses
-            CustomTrade.RECIPE_DEFAULT_TIER, //tier
-            destroy //destroy parameters ItemStack
+            CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
+            CustomTrade.RECIPE_MAX_USES,
+            CustomTrade.RECIPE_DEFAULT_TIER,
+            destroy
         );
-
-        const villTag = villager.save();
-        const list = [recipe];
-        villTag.Offers.Recipes.push(list[0]);
-        villager.load(villTag);
-        recipe.dispose();
-
-        if (destroy) {
-            buyAItem.destruct();
-            buyBItem.destruct();
-            sellItem.destruct();
-        }
     }
 
     export function removeAllRecipes(villager: Actor) {
