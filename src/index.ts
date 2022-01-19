@@ -284,10 +284,17 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     )
                 ).then((resp) => {
                     if (resp === null) return;
-                    const [name, NoHurt, NoMovement] = resp;
+                    const [Name, NoHurt, NoMovement] = resp;
                     if (!villager.ctxbase.isVaild()) return;
                     TraderMgmt.setInvincibility(villager, NoHurt, NoMovement);
-                    villager.setNameTag(name);
+                    villager.setNameTag(Name);
+                    CustomTrade.SendTranslated(
+                        player,
+                        "command.properties.success",
+                        Name,
+                        NoHurt,
+                        NoMovement
+                    );
                 });
             }
         });

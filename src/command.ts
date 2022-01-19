@@ -210,6 +210,14 @@ cmd_trader.overload(
             TraderMgmt.setInvincibility(entity, p.NoHurt, p.NoMovement);
             entity.setNameTag(p.Name);
         }
+
+        CustomTrade.SendTranslated(
+            player,
+            "command.properties.success",
+            p.Name,
+            p.NoHurt,
+            p.NoMovement
+        );
     },
     {
         option: command.enum("Properties", "prop", "properties"),
