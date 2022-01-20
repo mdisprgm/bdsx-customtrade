@@ -104,7 +104,7 @@ export namespace CustomTrade {
      * @param traderExp trader exp
      * @param maxUses max of uses
      * @param tier tier of the recipe
-     * @param destroy wheter destroy the `ItemStack` instances in parameters
+     * @param destruct wheter destruct the `ItemStack` instances in parameters
      * @returns allocated recipe tag
      */
     export function allocateRecipeTag(
@@ -117,7 +117,7 @@ export namespace CustomTrade {
         traderExp: number = RECIPE_DEFAULT_TRADER_EXP,
         maxUses: number = RECIPE_MAX_USES,
         tier: number = RECIPE_DEFAULT_TIER,
-        destroy: boolean = true
+        destruct: boolean = true
     ): Tag {
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
@@ -151,9 +151,9 @@ export namespace CustomTrade {
             retTag.buyB = buyBTag;
             retTag.buyBCount = buyBTag.Count;
             retTag.priceMultiplierB = priceMultiplierB ?? 0;
-            if (destroy) buyItemB.destruct();
+            if (destruct) buyItemB.destruct();
         }
-        if (destroy) {
+        if (destruct) {
             buyItemA.destruct();
             sellItem.destruct();
         }
@@ -164,12 +164,12 @@ export namespace CustomTrade {
 
     /**
      * @param item Item to check
-     * @param destroy If the Item will be destructed
+     * @param destruct If the Item will be destructed
      * @returns If the Item is the `minecraft:air`
      */
-    export function IsAir(item: ItemStack, destroy: boolean = false): boolean {
+    export function IsAir(item: ItemStack, destruct: boolean = false): boolean {
         const isAir = item.getId() === 0;
-        if (destroy) item.destruct();
+        if (destruct) item.destruct();
         return isAir;
     }
 

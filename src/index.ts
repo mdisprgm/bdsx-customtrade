@@ -79,7 +79,7 @@ export namespace TraderMgmt {
         traderExp: number = CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
         maxUses: number = CustomTrade.RECIPE_MAX_USES /*MAX OF INT32 */,
         tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
-        destroy: boolean = true
+        destruct: boolean = true
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
@@ -96,7 +96,7 @@ export namespace TraderMgmt {
             traderExp, //trade reward Exp
             maxUses, //max uses
             tier, //tier
-            destroy //destroy parameters ItemStack
+            destruct //destroy parameters ItemStack
         );
 
         const villTag = villager.save();
@@ -122,7 +122,7 @@ export namespace TraderMgmt {
 
         villager.load(villTag);
         recipe.dispose();
-        if (destroy) {
+        if (destruct) {
             buyAItem.destruct();
             buyBItem.destruct();
             sellItem.destruct();
@@ -133,7 +133,7 @@ export namespace TraderMgmt {
         buyAItem: ItemStack,
         buyBItem: ItemStack,
         sellItem: ItemStack,
-        destroy: boolean = true
+        destruct: boolean = true
     ) {
         if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
             return;
@@ -148,7 +148,7 @@ export namespace TraderMgmt {
             CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
             CustomTrade.RECIPE_MAX_USES,
             CustomTrade.RECIPE_DEFAULT_TIER,
-            destroy
+            destruct
         );
     }
 
