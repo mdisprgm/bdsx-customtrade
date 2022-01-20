@@ -4,7 +4,10 @@
 
 # wand
 
-`custom_trader wand`<br>
+```sh
+custom_trader wand
+```
+<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_wand.png" alt="cmd_wand" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_wand_result.png" alt="cmd_wand_result" width="450"/>
 
@@ -21,12 +24,18 @@ Left-Click(Attack)<br>
 
 ## add_simple
 
-`custom_trader recipe add_simple beef 8 0 coal 2 0 cooked_beef 8 0`<br>
+```sh
+custom_trader recipe add_simple beef 8 0 coal 2 0 cooked_beef 8 0
+```
+<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_addSimple.png" alt="cmd_recipe_addSimple" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_addSimple_success.png" alt="cmd_recipe_addSimple_success" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_addSimple_result.png" alt="cmd_recipe_addSimple_result" width="450"/><br>
 
-`custom_trader recipe add_simple charcoal 2 0 air 0 0 coal 2 0`<br>
+```sh
+custom_trader recipe add_simple charcoal 2 0 air 0 0 coal 2 0
+```
+<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_addSimple_snigle_buy.png" alt="cmd_addSimple_snigle_buy" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_addSimple_single_buy_result.png" alt="cmd_addSimple_single_buy_result" width="450"/><br>
 
@@ -39,6 +48,9 @@ Left-Click(Attack)<br>
 
 # remove_all
 
-`custom_trader recipe remove_all`<br>
+```sh
+custom_trader recipe remove_all
+```
+<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_removeAll.png" alt="cmd_recipe_removeAll" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_removeAll_result.png" alt="cmd_recipe_removeAll_result" width="450"/><br>
