@@ -56,10 +56,10 @@ export namespace CustomTrade {
         const raw: string | undefined = __TRANSLATOR__[key];
         if (raw === undefined) return key;
         let str = String(raw).replace(/\\n/g, "\n");
-        for (let i = 0; i < args.length; ) {
+        for (let i = 0; i < args.length; i++) {
             const idx = str.lastIndexOf(FORMAT_SPECIFIER);
             if (idx < 0) return str;
-            str = str.replace(FORMAT_SPECIFIER, args[i++]);
+            str = str.replace(FORMAT_SPECIFIER, args[i]);
         }
         return str;
     }
