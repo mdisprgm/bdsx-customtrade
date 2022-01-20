@@ -13,7 +13,7 @@
 ## Select
 
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/action_interact_to_push_to_list.png" alt="action_interact_to_push_to_list" width="350"/>
-<img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/actoin_attack_to_remove_from_list.png" alt="actoin_attack_to_remove_from_list" width="350"/>
+<img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/action_attack_to_remove_from_list.png" alt="action_attack_to_remove_from_list" width="350"/>
 
 ## add_simple
 
