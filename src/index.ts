@@ -160,18 +160,20 @@ export namespace TraderMgmt {
         villager.load(villTag);
     }
 
-    function getAttribute(entity: Actor, key: string) {
-        if (!CustomTrade.IsValidTrader(entity)) return;
-        const villTag = entity.save();
-        const attribute = villTag.Attributes.find((v: any) => {
-            return v.Name === key;
-        });
-        return attribute;
-    }
     function getAttributes(entity: Actor) {
         if (!CustomTrade.IsValidTrader(entity)) return;
         const villTag = entity.save();
         return villTag.Attributes;
+    }
+    function getAttribute(
+        entity: Actor,
+        key: string
+    ): Record<string, any> | null {
+        if (!CustomTrade.IsValidTrader(entity)) return null;
+        const attribute = getAttributes(entity).find((v: any) => {
+            return v.Name === key;
+        });
+        return attribute ?? null;
     }
     export function setInvincibility(
         villager: Actor,
@@ -199,10 +201,10 @@ export namespace TraderMgmt {
         return {
             NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
             NoMovement:
-                getAttribute(
+                (getAttribute(
                     villager,
                     TraderMgmt.Invincbility.ATTR_KEY_MOVEMENT
-                ).Current < TraderMgmt.Invincbility.MOVEMENT_NORMAL,
+                )?.Current ?? 0) < TraderMgmt.Invincbility.MOVEMENT_NORMAL,
         };
     }
 }
