@@ -42,7 +42,9 @@ custom_trader recipe add_simple charcoal 2 0 air 0 0 coal 2 0
 <br>
 
 ## add
-
+```sh
+custom_trader recipe add furnace 1 0 0 log 1 0 0 smoker 1 0 0 10 2147483647 1
+```
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_add.png" alt="cmd_recipe_add" width="450"/><br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/cmd_recipe_add_result.png" alt="cmd_recipe_add_result" width="450"/><br>
 
