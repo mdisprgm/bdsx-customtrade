@@ -1,7 +1,7 @@
 import { Actor } from "bdsx/bds/actor";
 import "bdsx/bds/implements";
 import { ItemStack } from "bdsx/bds/inventory";
-import { NBT, Tag } from "bdsx/bds/nbt";
+import { ByteTag, CompoundTag, NBT, Tag } from "bdsx/bds/nbt";
 import { ServerPlayer } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
 import { UNDNAME_NAME_ONLY } from "bdsx/dbghelp";
@@ -78,8 +78,13 @@ export namespace CustomTrade {
         UNDNAME_NAME_ONLY
     );
     export function IsWand(item: ItemStack): boolean {
-        const tag = item.save();
-        return tag.tag?.IsCustomTradeWand ?? false;
+        const tag = item.allocateAndSave();
+        const data = tag
+            .get<CompoundTag>("tag")
+            ?.get<ByteTag>("IsCustomTradeWand")?.data;
+        const ret = Boolean(data);
+        tag.dispose();
+        return ret;
     }
     export const VILLAGER = "minecraft:villager_v2";
     export const WANDERING_TRADER = "minecraft:wandering_trader";
