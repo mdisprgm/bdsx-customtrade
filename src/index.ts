@@ -81,7 +81,7 @@ export namespace TraderMgmt {
         tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
         destruct: boolean = true
     ) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return;
         const B_IS_AIR = CustomTrade.IsAir(buyBItem);
         const recipe = CustomTrade.allocateRecipeTag(
@@ -135,7 +135,7 @@ export namespace TraderMgmt {
         sellItem: ItemStack,
         destruct: boolean = true
     ) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return;
         addRecipe(
             villager,
@@ -153,7 +153,7 @@ export namespace TraderMgmt {
     }
 
     export function removeAllRecipes(villager: Actor) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return;
         const villTag = villager.save();
         villTag.Offers.Recipes = [];
@@ -180,7 +180,7 @@ export namespace TraderMgmt {
         nohurt: boolean,
         nomovement: boolean
     ) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return;
         if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
         else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
@@ -196,7 +196,7 @@ export namespace TraderMgmt {
         villager.load(villTag);
     }
     export function getInvincibility(villager: Actor) {
-        if (!villager.ctxbase.isVaild() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return { NoHurt: false, NoMovement: false };
         return {
             NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
@@ -296,7 +296,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                 ).then((resp) => {
                     if (resp === null) return;
                     const [Name, NoHurt, NoMovement] = resp;
-                    if (!villager.ctxbase.isVaild()) return;
+                    if (!villager.ctxbase.isValid()) return;
                     TraderMgmt.setInvincibility(villager, NoHurt, NoMovement);
                     villager.setNameTag(Name);
                     CustomTrade.SendTranslated(
