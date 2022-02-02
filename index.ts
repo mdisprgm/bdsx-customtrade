@@ -14,7 +14,6 @@ import * as ini from "ini";
 import * as path from "path";
 import { VillagerInteractEvent } from "./src/event";
 
-
 console.log("[CustomTrade] allocated");
 
 events.serverOpen.on(() => {
