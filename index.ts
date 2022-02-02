@@ -9,11 +9,11 @@ import { events } from "bdsx/event";
 import { Event } from "bdsx/eventtarget";
 import { bedrockServer } from "bdsx/launcher";
 import { ProcHacker } from "bdsx/prochacker";
+import * as fs from "fs";
+import * as ini from "ini";
+import * as path from "path";
 import { VillagerInteractEvent } from "./src/event";
 
-import path = require("path");
-import fs = require("fs");
-import ini = require("ini");
 
 console.log("[CustomTrade] allocated");
 
