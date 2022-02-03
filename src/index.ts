@@ -1,19 +1,18 @@
-import "./command";
-import "./event";
-
-import { Actor } from "bdsx/bds/actor";
+import { Actor, ActorFlags } from "bdsx/bds/actor";
 import { Form } from "bdsx/bds/form";
 import { ItemStack } from "bdsx/bds/inventory";
+import { NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { PlayerPermission } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
+import { events } from "bdsx/event";
 import { CustomTrade } from "..";
+import { TraderCommand } from "./command";
 import { EditorWindow } from "./forms";
 import { Player$setCarriedItem } from "./hacker";
-import { TraderCommand } from "./command";
-import { events } from "bdsx/event";
 
-import { NBT } from "bdsx/bds/nbt";
+import "./command";
+import "./event";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -182,18 +181,11 @@ export namespace TraderMgmt {
     ) {
         if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
             return;
+
         if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
         else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
 
-        const villTag = villager.save();
-        const movement = villTag.Attributes.find((v: any) => {
-            return v.Name === TraderMgmt.Invincbility.ATTR_KEY_MOVEMENT;
-        });
-
-        if (nomovement) {
-            movement.Current = TraderMgmt.Invincbility.NBT_MOVEMENT_SLOWED;
-        } else movement.Current = TraderMgmt.Invincbility.NBT_MOVEMENT_NORMAL;
-        villager.load(villTag);
+        villager.setStatusFlag(ActorFlags.NoAI, nomovement);
     }
     export function getInvincibility(villager: Actor) {
         if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
