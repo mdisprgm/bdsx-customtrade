@@ -89,8 +89,12 @@ export namespace CustomTrade {
     export const WANDERING_TRADER = "minecraft:wandering_trader";
     export function IsValidTrader(entity: Actor): boolean {
         const id = entity.getIdentifier();
-        const validEntity = id === VILLAGER || id === WANDERING_TRADER;
-        return validEntity && entity.save().Offers?.Recipes;
+        const validId = id === VILLAGER || id === WANDERING_TRADER;
+        return (
+            validId &&
+            entity.save().Offers?.Recipes !== undefined &&
+            entity.ctxbase.isValid()
+        );
     }
     /**
      * @deprecated Use IsValidTrader
