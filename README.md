@@ -32,6 +32,10 @@ The plugin for bdsx
 
 -   Add: Glinted wand
 
+### 22.02.06
+
+-   Add: Tool to remove one recipe (only command)
+
 # Tip
 
 -   You can set your langauges, in `config.json`:
@@ -53,7 +57,7 @@ Supported languages list:<br>
 -   enchanted items in recipes
 -   pre-defined villagers
 -   copy and paste recipes
--   improved removing ways
+-   improved removing ways, ~~command~~ + form UI
 
 # License
 
