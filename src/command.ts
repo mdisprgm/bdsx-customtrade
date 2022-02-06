@@ -253,13 +253,35 @@ cmd_trader.overload(
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
+            TraderMgmt.removeRecipe(villager, p.index);
+        }
+        CustomTrade.SendTranslated(player, "command.remove.success", p.index);
+    },
+    {
+        option: CommandRecipeOption,
+        remove: command.enum("RecipeRemove", "remove"),
+        index: int32_t,
+    }
+);
+
+cmd_trader.overload(
+    (p, o, op) => {
+        const player = o.getEntity();
+        if (!player?.isPlayer()) return;
+
+        const targets = GetTargets(player);
+        if (!targets) return;
+
+        for (const target of targets) {
+            const villager = Actor.fromUniqueIdBin(target.id);
+            if (!villager) continue;
             TraderMgmt.removeAllRecipes(villager);
         }
         CustomTrade.SendTranslated(player, "command.removeAll.success");
     },
     {
         option: CommandRecipeOption,
-        opt1: command.enum("RecipeRemoveAll", "remove_all"),
+        remove_all: command.enum("RecipeRemoveAll", "remove_all"),
     }
 );
 

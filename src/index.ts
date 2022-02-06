@@ -151,12 +151,25 @@ export namespace TraderMgmt {
         );
     }
 
-    export function removeAllRecipes(villager: Actor) {
-        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
-            return;
+    export function removeRecipe(villager: Actor, index: number): boolean {
+        if (!CustomTrade.IsValidTrader(villager)) return false;
+        const villTag = villager.save();
+        index = index | 0;
+        if (index < 0 || villTag.Offers.Recipes.length - 1 < index) {
+            return false;
+        }
+
+        villTag.Offers.Recipes.splice(index | 0, 1);
+        villager.load(villTag);
+        return true;
+    }
+
+    export function removeAllRecipes(villager: Actor): boolean {
+        if (!CustomTrade.IsValidTrader(villager)) return false;
         const villTag = villager.save();
         villTag.Offers.Recipes = [];
         villager.load(villTag);
+        return true;
     }
 
     function getAttributes(entity: Actor) {
