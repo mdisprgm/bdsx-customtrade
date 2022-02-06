@@ -49,7 +49,11 @@ Supported languages list:<br>
 
 # TODO
 
--   ~~Interface with Custom Command~~
+-   ~~interface with custom command~~ - 22.01.18
+-   enchanted items in recipes
+-   pre-defined villagers
+-   copy and paste recipes
+-   improved removing ways
 
 # License
 
