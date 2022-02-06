@@ -9,6 +9,8 @@ export namespace VillagerTradeAPI {
     export const setInvincibility = TraderMgmt.setInvincibility;
     export const getInvincibility = TraderMgmt.getInvincibility;
 
+    export const isValidTrader = TraderMgmt.isValidTrader;
+
     export const allocateRecipeTag = CustomTrade.allocateRecipeTag;
     export const onVillagerInteract = CustomTrade.onVillagerInteract;
 
