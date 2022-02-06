@@ -198,6 +198,10 @@ export namespace TraderMgmt {
         if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
         else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
 
+        nomovement
+            ? villager.addTag(TraderMgmt.Invincbility.NoMovement)
+            : villager.removeTag(TraderMgmt.Invincbility.NoMovement);
+
         villager.setStatusFlag(ActorFlags.NoAI, nomovement);
     }
     export function getInvincibility(villager: Actor) {
@@ -205,11 +209,7 @@ export namespace TraderMgmt {
             return { NoHurt: false, NoMovement: false };
         return {
             NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
-            NoMovement:
-                (getAttribute(
-                    villager,
-                    TraderMgmt.Invincbility.ATTR_KEY_MOVEMENT
-                )?.Current ?? 0) < TraderMgmt.Invincbility.MOVEMENT_NORMAL,
+            NoMovement: villager.hasTag(TraderMgmt.Invincbility.NoMovement),
         };
     }
 }
@@ -218,6 +218,13 @@ export namespace TraderMgmt {
 events.entityHurt.on((ev) => {
     if (ev.entity.hasTag(TraderMgmt.Invincbility.NoHurt)) {
         return CANCEL;
+    }
+});
+
+events.entityCreated.on((ev) => {
+    if (CustomTrade.IsValidTrader(ev.entity)) {
+        const invc = TraderMgmt.getInvincibility(ev.entity);
+        TraderMgmt.setInvincibility(ev.entity, invc.NoHurt, invc.NoMovement);
     }
 });
 

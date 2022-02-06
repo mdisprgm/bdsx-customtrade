@@ -118,7 +118,7 @@ export namespace EditorWindow {
         };
     }
     /**
-     * @deprecated WILL BE DELETED. Use createSetProperties
+     * @deprecated WILL BE DELETED. Use {@link createSetProperties}
      */
     export const SetInvincibility: FormDataCustom = {
         type: "custom_form",
