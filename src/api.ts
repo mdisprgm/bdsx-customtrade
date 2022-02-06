@@ -4,6 +4,7 @@ import { CustomTrade } from "..";
 export namespace VillagerTradeAPI {
     export const addRecipe = TraderMgmt.addRecipe;
     export const addSimpleRecipe = TraderMgmt.addSimpleRecipe;
+    export const removeRecipe = TraderMgmt.removeRecipe;
     export const removeAllRecipes = TraderMgmt.removeAllRecipes;
     export const setInvincibility = TraderMgmt.setInvincibility;
     export const getInvincibility = TraderMgmt.getInvincibility;
