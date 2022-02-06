@@ -106,7 +106,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
     const villPos = villager.getPosition();
 
     const ni = player.getNetworkIdentifier();
-    if (!CustomTrade.IsValidTrader(villager)) return;
+    if (!TraderMgmt.isValidTrader(villager)) return;
     const item = player.getMainhandSlot();
     if (!CustomTrade.IsWand(item)) return;
     if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
@@ -178,7 +178,7 @@ cmd_trader.overload(
 cmd_trader.overload(
     (p, o, op) => {
         for (const actor of p.targets.newResults(o)) {
-            if (actor.isPlayer() || !CustomTrade.IsValidTrader(actor)) continue;
+            if (actor.isPlayer() || !TraderMgmt.isValidTrader(actor)) continue;
             const tag = actor.save();
             const att = tag.Attributes.find(
                 (v: any) => v.Name === "minecraft:movement"

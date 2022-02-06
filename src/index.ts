@@ -7,12 +7,11 @@ import { PlayerPermission } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
 import { events } from "bdsx/event";
 import { CustomTrade } from "..";
+import "./command";
 import { TraderCommand } from "./command";
+import "./event";
 import { EditorWindow } from "./forms";
 import { Player$setCarriedItem } from "./hacker";
-
-import "./command";
-import "./event";
 
 namespace OpenTo {
     export async function ChooseMenu(
@@ -44,6 +43,17 @@ namespace OpenTo {
     }
 }
 export namespace TraderMgmt {
+    export function isValidTrader(villager: Actor) {
+        const id = villager.getIdentifier();
+        const validId =
+            id === CustomTrade.VILLAGER || id === CustomTrade.WANDERING_TRADER;
+        return (
+            validId &&
+            villager.save().Offers?.Recipes !== undefined &&
+            villager.ctxbase.isValid()
+        );
+    }
+
     export class Properties {
         name: string;
         noMovement: boolean;
@@ -80,7 +90,7 @@ export namespace TraderMgmt {
         tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
         destruct: boolean = true
     ) {
-        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
             return;
         const B_IS_AIR = CustomTrade.IsAir(buyBItem);
         const recipe = CustomTrade.allocateRecipeTag(
@@ -134,7 +144,7 @@ export namespace TraderMgmt {
         sellItem: ItemStack,
         destruct: boolean = true
     ) {
-        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
             return;
         addRecipe(
             villager,
@@ -152,7 +162,7 @@ export namespace TraderMgmt {
     }
 
     export function removeRecipe(villager: Actor, index: number): boolean {
-        if (!CustomTrade.IsValidTrader(villager)) return false;
+        if (!TraderMgmt.isValidTrader(villager)) return false;
         const villTag = villager.save();
         index = index | 0;
         if (index < 0 || villTag.Offers.Recipes.length - 1 < index) {
@@ -165,7 +175,7 @@ export namespace TraderMgmt {
     }
 
     export function removeAllRecipes(villager: Actor): boolean {
-        if (!CustomTrade.IsValidTrader(villager)) return false;
+        if (!TraderMgmt.isValidTrader(villager)) return false;
         const villTag = villager.save();
         villTag.Offers.Recipes = [];
         villager.load(villTag);
@@ -173,7 +183,7 @@ export namespace TraderMgmt {
     }
 
     function getAttributes(entity: Actor) {
-        if (!CustomTrade.IsValidTrader(entity)) return;
+        if (!TraderMgmt.isValidTrader(entity)) return;
         const villTag = entity.save();
         return villTag.Attributes;
     }
@@ -181,7 +191,7 @@ export namespace TraderMgmt {
         entity: Actor,
         key: string
     ): Record<string, any> | null {
-        if (!CustomTrade.IsValidTrader(entity)) return null;
+        if (!TraderMgmt.isValidTrader(entity)) return null;
         const attribute = getAttributes(entity).find((v: any) => {
             return v.Name === key;
         });
@@ -192,7 +202,7 @@ export namespace TraderMgmt {
         nohurt: boolean,
         nomovement: boolean
     ) {
-        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
             return;
 
         if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
@@ -205,7 +215,7 @@ export namespace TraderMgmt {
         villager.setStatusFlag(ActorFlags.NoAI, nomovement);
     }
     export function getInvincibility(villager: Actor) {
-        if (!villager.ctxbase.isValid() || !CustomTrade.IsValidTrader(villager))
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
             return { NoHurt: false, NoMovement: false };
         return {
             NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
@@ -222,7 +232,7 @@ events.entityHurt.on((ev) => {
 });
 
 events.entityCreated.on((ev) => {
-    if (CustomTrade.IsValidTrader(ev.entity)) {
+    if (TraderMgmt.isValidTrader(ev.entity)) {
         const invc = TraderMgmt.getInvincibility(ev.entity);
         TraderMgmt.setInvincibility(ev.entity, invc.NoHurt, invc.NoMovement);
     }

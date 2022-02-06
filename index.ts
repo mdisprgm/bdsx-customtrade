@@ -1,4 +1,3 @@
-import { Actor } from "bdsx/bds/actor";
 import "bdsx/bds/implements";
 import { ItemStack } from "bdsx/bds/inventory";
 import { ByteTag, CompoundTag, NBT, Tag } from "bdsx/bds/nbt";
@@ -87,19 +86,6 @@ export namespace CustomTrade {
     }
     export const VILLAGER = "minecraft:villager_v2";
     export const WANDERING_TRADER = "minecraft:wandering_trader";
-    export function IsValidTrader(entity: Actor): boolean {
-        const id = entity.getIdentifier();
-        const validId = id === VILLAGER || id === WANDERING_TRADER;
-        return (
-            validId &&
-            entity.save().Offers?.Recipes !== undefined &&
-            entity.ctxbase.isValid()
-        );
-    }
-    /**
-     * @deprecated Use IsValidTrader
-     */
-    export const IsVillager = IsValidTrader;
 
     /**
      *

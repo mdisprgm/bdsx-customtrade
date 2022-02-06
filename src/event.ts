@@ -8,6 +8,7 @@ import { ServerPlayer } from "bdsx/bds/player";
 import { serverInstance } from "bdsx/bds/server";
 import { CANCEL } from "bdsx/common";
 import { events } from "bdsx/event";
+import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 
 const MCLEVEL = serverInstance.minecraft.getLevel();
@@ -32,7 +33,7 @@ events
 
             const entity = MCLEVEL.getRuntimeEntity(data.runtimeId, false);
             if (!entity) return;
-            if (CustomTrade.IsValidTrader(entity)) {
+            if (TraderMgmt.isValidTrader(entity)) {
                 const event = new VillagerInteractEvent(
                     player,
                     entity,
