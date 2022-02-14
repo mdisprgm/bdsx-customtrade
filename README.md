@@ -36,6 +36,10 @@ The plugin for bdsx
 
 -   Add: Tool to remove one recipe (only command)
 
+### 22.02.14
+
+-   Change: `hacker.ini`
+
 # Tip
 
 -   You can set your langauges, in `config.json`:
