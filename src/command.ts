@@ -48,30 +48,30 @@ class EditingTarget {
     constructor(public readonly id: ActorUniqueID, public readonly pos: Vec3) {}
 }
 
-export const EditingTargets = new Map<NetworkIdentifier, EditingTarget[]>();
+export const EditingTargets = new Map<NetworkIdentifier, Set<EditingTarget>>();
 
 events.playerJoin.on((ev) => {
     const ni = ev.player.getNetworkIdentifier();
-    EditingTargets.set(ni, []);
+    EditingTargets.get(ni)?.clear();
 });
 events.networkDisconnected.on((ni) => {
     EditingTargets.delete(ni);
 });
 
-function GetTargets(from: ServerPlayer): EditingTarget[] | null {
+function GetTargets(from: ServerPlayer): Set<EditingTarget> | null {
     return EditingTargets.get(from.getNetworkIdentifier()) ?? null;
 }
 function DeleteTargets(from: ServerPlayer): boolean {
     const ni = from.getNetworkIdentifier();
     if (EditingTargets.has(ni)) {
-        EditingTargets.set(ni, []);
+        EditingTargets.get(ni)!.clear();
         return true;
     }
     return false;
 }
 function HasTargets(from: ServerPlayer): number {
     const ni = from.getNetworkIdentifier();
-    return EditingTargets.get(ni)?.length ?? 0;
+    return EditingTargets.get(ni)?.size ?? 0;
 }
 
 CustomTrade.onVillagerInteract.on((ev) => {
@@ -90,12 +90,11 @@ CustomTrade.onVillagerInteract.on((ev) => {
 
     if (player.isSneaking()) {
         if (ev.transaction.actionType !== ItemUseOnActorInventoryTransaction.ActionType.Attack) {
-            EditingTargets.get(ni)?.push(new EditingTarget(villager.getUniqueIdBin(), Vec3.construct(villPos)));
+            EditingTargets.get(ni)?.add(new EditingTarget(villager.getUniqueIdBin(), Vec3.construct(villPos)));
             CustomTrade.SendTranslated(player, "editingTarget.selected", villPos.x.toFixed(2), villPos.y.toFixed(2), villPos.z.toFixed(2));
         } else {
             if (EditingTargets.has(ni)) {
-                const list = EditingTargets.get(ni)!;
-                list.splice(0, list.length);
+                EditingTargets.get(ni)!.clear();
                 CustomTrade.SendTranslated(player, "editingTarget.unselected");
             }
         }
