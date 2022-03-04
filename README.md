@@ -40,6 +40,10 @@ The plugin for bdsx
 
 -   Change: `hacker.ini`
 
+### 22.03.04
+
+-   Add: enchanted recipes with Form UI
+
 # Tip
 
 -   You can set your langauges, in `config.json`:
@@ -58,10 +62,10 @@ Supported languages list:<br>
 # TODO
 
 -   ~~interface with custom command~~ - 22.01.18
--   enchanted items in recipes
+-   enchanted items in recipes, command + ~~Form UI~~
 -   pre-defined villagers
 -   copy and paste recipes
--   improved removing ways, ~~command~~ + form UI
+-   improved removing ways, ~~command~~ + Form UI
 
 # License
 
