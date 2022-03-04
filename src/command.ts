@@ -1,14 +1,7 @@
 import { Actor, ActorUniqueID } from "bdsx/bds/actor";
 import { Vec3 } from "bdsx/bds/blockpos";
-import {
-    ActorCommandSelector,
-    CommandItem,
-    CommandPermissionLevel,
-} from "bdsx/bds/command";
-import {
-    ItemStack,
-    ItemUseOnActorInventoryTransaction,
-} from "bdsx/bds/inventory";
+import { ActorCommandSelector, CommandItem, CommandPermissionLevel } from "bdsx/bds/command";
+import { ItemStack, ItemUseOnActorInventoryTransaction } from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { PlayerPermission, ServerPlayer } from "bdsx/bds/player";
@@ -26,28 +19,13 @@ export namespace TraderCommand {
         if (count) {
             return count;
         } else {
-            CustomTrade.SendTranslated(
-                player,
-                "command.addRecipe.error.no_targets"
-            );
+            CustomTrade.SendTranslated(player, "command.addRecipe.error.no_targets");
             return 0;
         }
     }
-    export function dynamicAddRecipeOutput(
-        player: ServerPlayer,
-        buyA: ItemStack,
-        buyB: ItemStack,
-        sell: ItemStack
-    ) {
+    export function dynamicAddRecipeOutput(player: ServerPlayer, buyA: ItemStack, buyB: ItemStack, sell: ItemStack) {
         if (CustomTrade.IsAir(buyB, false)) {
-            CustomTrade.SendTranslated(
-                player,
-                "addRecipe.success",
-                `${buyA.getName()}`,
-                `${buyA.getAmount()}`,
-                `${sell.getName()}`,
-                `${sell.getAmount()}`
-            );
+            CustomTrade.SendTranslated(player, "addRecipe.success", `${buyA.getName()}`, `${buyA.getAmount()}`, `${sell.getName()}`, `${sell.getAmount()}`);
         } else {
             CustomTrade.SendTranslated(
                 player,
@@ -57,17 +35,13 @@ export namespace TraderCommand {
                 `${buyB.getName()}`,
                 `${buyB.getAmount()}`,
                 `${sell.getName()}`,
-                `${sell.getAmount()}`
+                `${sell.getAmount()}`,
             );
         }
     }
 }
 
-const cmd_trader = command.register(
-    "custom_trader",
-    "custom trader commands",
-    CommandPermissionLevel.Operator
-);
+const cmd_trader = command.register("custom_trader", "custom trader commands", CommandPermissionLevel.Operator);
 cmd_trader.alias("tradermgmt");
 
 class EditingTarget {
@@ -115,23 +89,9 @@ CustomTrade.onVillagerInteract.on((ev) => {
     }
 
     if (player.isSneaking()) {
-        if (
-            ev.transaction.actionType !==
-            ItemUseOnActorInventoryTransaction.ActionType.Attack
-        ) {
-            EditingTargets.get(ni)?.push(
-                new EditingTarget(
-                    villager.getUniqueIdBin(),
-                    Vec3.construct(villPos)
-                )
-            );
-            CustomTrade.SendTranslated(
-                player,
-                "editingTarget.selected",
-                villPos.x.toFixed(2),
-                villPos.y.toFixed(2),
-                villPos.z.toFixed(2)
-            );
+        if (ev.transaction.actionType !== ItemUseOnActorInventoryTransaction.ActionType.Attack) {
+            EditingTargets.get(ni)?.push(new EditingTarget(villager.getUniqueIdBin(), Vec3.construct(villPos)));
+            CustomTrade.SendTranslated(player, "editingTarget.selected", villPos.x.toFixed(2), villPos.y.toFixed(2), villPos.z.toFixed(2));
         } else {
             if (EditingTargets.has(ni)) {
                 const list = EditingTargets.get(ni)!;
@@ -171,7 +131,7 @@ cmd_trader.overload(
     },
     {
         option: command.enum("CustomTradeWand", "wand"),
-    }
+    },
 );
 
 //0.5 is default for villagers
@@ -180,9 +140,7 @@ cmd_trader.overload(
         for (const actor of p.targets.newResults(o)) {
             if (actor.isPlayer() || !TraderMgmt.isValidTrader(actor)) continue;
             const tag = actor.save();
-            const att = tag.Attributes.find(
-                (v: any) => v.Name === "minecraft:movement"
-            );
+            const att = tag.Attributes.find((v: any) => v.Name === "minecraft:movement");
             att.Current = NBT.float(p.value);
             actor.load(tag);
         }
@@ -191,7 +149,7 @@ cmd_trader.overload(
         option: command.enum("Speed", "speed"),
         targets: ActorCommandSelector,
         value: float32_t,
-    }
+    },
 );
 
 //infinite health, zero movement speed
@@ -212,20 +170,14 @@ cmd_trader.overload(
             entity.setNameTag(p.Name);
         }
 
-        CustomTrade.SendTranslated(
-            player,
-            "command.properties.success",
-            p.Name,
-            p.NoHurt,
-            p.NoMovement
-        );
+        CustomTrade.SendTranslated(player, "command.properties.success", p.Name, p.NoHurt, p.NoMovement);
     },
     {
         option: command.enum("Properties", "prop", "properties"),
         Name: CxxString,
         NoHurt: bool_t,
         NoMovement: bool_t,
-    }
+    },
 );
 
 const CommandRecipeOption = command.enum("recipe", "recipe");
@@ -239,7 +191,7 @@ cmd_trader.overload(
     },
     {
         opt1: command.enum("RecipeInitTargets", "init"),
-    }
+    },
 );
 
 cmd_trader.overload(
@@ -261,7 +213,7 @@ cmd_trader.overload(
         option: CommandRecipeOption,
         remove: command.enum("RecipeRemove", "remove"),
         index: int32_t,
-    }
+    },
 );
 
 cmd_trader.overload(
@@ -282,7 +234,7 @@ cmd_trader.overload(
     {
         option: CommandRecipeOption,
         remove_all: command.enum("RecipeRemoveAll", "remove_all"),
-    }
+    },
 );
 
 function recreateItemInstance(item: ItemStack, amount: number, data: number) {
@@ -295,30 +247,15 @@ cmd_trader.overload(
         const player = o.getEntity();
         if (!player?.isPlayer()) return;
         if (!HasTargets(player)) {
-            CustomTrade.SendTranslated(
-                player,
-                "command.addRecipe.error.no_targets"
-            );
+            CustomTrade.SendTranslated(player, "command.addRecipe.error.no_targets");
             return;
         }
         const targets = GetTargets(player);
         if (!targets) return;
 
-        const buyA = recreateItemInstance(
-            p.buyA.createInstance(1),
-            p.countA,
-            p.dataA
-        );
-        const buyB = recreateItemInstance(
-            p.buyB.createInstance(1),
-            p.countB,
-            p.dataB
-        );
-        const sell = recreateItemInstance(
-            p.sell.createInstance(1),
-            p.countSell,
-            p.dataSell
-        );
+        const buyA = recreateItemInstance(p.buyA.createInstance(1), p.countA, p.dataA);
+        const buyB = recreateItemInstance(p.buyB.createInstance(1), p.countB, p.dataB);
+        const sell = recreateItemInstance(p.sell.createInstance(1), p.countSell, p.dataSell);
 
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
@@ -345,7 +282,7 @@ cmd_trader.overload(
         sell: CommandItem,
         countSell: int32_t,
         dataSell: int32_t,
-    }
+    },
 );
 
 cmd_trader.overload(
@@ -357,40 +294,16 @@ cmd_trader.overload(
         const targets = GetTargets(player);
         if (!targets) return;
 
-        const buyA = recreateItemInstance(
-            p.buyA.createInstance(1),
-            p.countA,
-            p.dataA
-        );
-        const buyB = recreateItemInstance(
-            p.buyB.createInstance(1),
-            p.countB,
-            p.dataB
-        );
-        const sell = recreateItemInstance(
-            p.sell.createInstance(1),
-            p.countSell,
-            p.dataSell
-        );
+        const buyA = recreateItemInstance(p.buyA.createInstance(1), p.countA, p.dataA);
+        const buyB = recreateItemInstance(p.buyB.createInstance(1), p.countB, p.dataB);
+        const sell = recreateItemInstance(p.sell.createInstance(1), p.countSell, p.dataSell);
 
         for (const target of targets) {
             const villager = Actor.fromUniqueIdBin(target.id);
             if (!villager) continue;
 
             //items are destructed here
-            TraderMgmt.addRecipe(
-                villager,
-                buyA,
-                p.priceMultiA,
-                buyB,
-                p.priceMultiB,
-                sell,
-                p.demand,
-                p.traderExp,
-                p.maxUses,
-                p.tier,
-                false
-            );
+            TraderMgmt.addRecipe(villager, buyA, p.priceMultiA, buyB, p.priceMultiB, sell, p.demand, p.traderExp, p.maxUses, p.tier, false);
         }
 
         TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
@@ -416,5 +329,5 @@ cmd_trader.overload(
         traderExp: [int32_t, true],
         maxUses: [int32_t, true],
         tier: [int32_t, true],
-    }
+    },
 );

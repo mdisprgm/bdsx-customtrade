@@ -14,44 +14,27 @@ import { EditorWindow } from "./forms";
 import { Player$setCarriedItem } from "./hacker";
 
 namespace OpenTo {
-    export async function ChooseMenu(
-        target: NetworkIdentifier
-    ): Promise<number | null> {
+    export async function ChooseMenu(target: NetworkIdentifier): Promise<number | null> {
         return await Form.sendTo(target, EditorWindow.ChooseMenu);
     }
 
-    export async function AddSimpleRecipe(
-        target: NetworkIdentifier
-    ): Promise<any[] | null> {
+    export async function AddSimpleRecipe(target: NetworkIdentifier): Promise<any[] | null> {
         return await Form.sendTo(target, EditorWindow.AddSimpleRecipe);
     }
 
-    export async function RemoveAllRecipes(
-        target: NetworkIdentifier
-    ): Promise<any[] | null> {
+    export async function RemoveAllRecipes(target: NetworkIdentifier): Promise<any[] | null> {
         return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
     }
 
-    export async function SetProperties(
-        target: NetworkIdentifier,
-        prop: TraderMgmt.Properties
-    ) {
-        return await Form.sendTo(
-            target,
-            EditorWindow.createSetProperties(prop)
-        );
+    export async function SetProperties(target: NetworkIdentifier, prop: TraderMgmt.Properties) {
+        return await Form.sendTo(target, EditorWindow.createSetProperties(prop));
     }
 }
 export namespace TraderMgmt {
     export function isValidTrader(villager: Actor) {
         const id = villager.getIdentifier();
-        const validId =
-            id === CustomTrade.VILLAGER || id === CustomTrade.WANDERING_TRADER;
-        return (
-            validId &&
-            villager.save().Offers?.Recipes !== undefined &&
-            villager.ctxbase.isValid()
-        );
+        const validId = id === CustomTrade.VILLAGER || id === CustomTrade.WANDERING_TRADER;
+        return validId && villager.save().Offers?.Recipes !== undefined && villager.ctxbase.isValid();
     }
 
     export class Properties {
@@ -88,24 +71,21 @@ export namespace TraderMgmt {
         traderExp: number = CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
         maxUses: number = CustomTrade.RECIPE_MAX_USES /*MAX OF INT32 */,
         tier: number = CustomTrade.RECIPE_DEFAULT_TIER,
-        destruct: boolean = true
+        destruct: boolean = true,
     ) {
-        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
-            return;
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return;
         const B_IS_AIR = CustomTrade.IsAir(buyBItem);
         const recipe = CustomTrade.allocateRecipeTag(
             buyAItem, //buyA
             priceMultiplierA, //priceMultiplierA
             B_IS_AIR ? null : buyBItem,
-            B_IS_AIR
-                ? CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER
-                : priceMultiplierB, //priceMultiplierB
+            B_IS_AIR ? CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER : priceMultiplierB, //priceMultiplierB
             sellItem,
             demand,
             traderExp, //trade reward Exp
             maxUses, //max uses
             tier, //tier
-            destruct //destroy parameters ItemStack
+            destruct, //destroy parameters ItemStack
         );
 
         const villTag = villager.save();
@@ -137,15 +117,8 @@ export namespace TraderMgmt {
             sellItem.destruct();
         }
     }
-    export function addSimpleRecipe(
-        villager: Actor,
-        buyAItem: ItemStack,
-        buyBItem: ItemStack,
-        sellItem: ItemStack,
-        destruct: boolean = true
-    ) {
-        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
-            return;
+    export function addSimpleRecipe(villager: Actor, buyAItem: ItemStack, buyBItem: ItemStack, sellItem: ItemStack, destruct: boolean = true) {
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return;
         addRecipe(
             villager,
             buyAItem,
@@ -157,7 +130,7 @@ export namespace TraderMgmt {
             CustomTrade.RECIPE_DEFAULT_TRADER_EXP,
             CustomTrade.RECIPE_MAX_USES,
             CustomTrade.RECIPE_DEFAULT_TIER,
-            destruct
+            destruct,
         );
     }
 
@@ -187,36 +160,25 @@ export namespace TraderMgmt {
         const villTag = entity.save();
         return villTag.Attributes;
     }
-    function getAttribute(
-        entity: Actor,
-        key: string
-    ): Record<string, any> | null {
+    function getAttribute(entity: Actor, key: string): Record<string, any> | null {
         if (!TraderMgmt.isValidTrader(entity)) return null;
         const attribute = getAttributes(entity).find((v: any) => {
             return v.Name === key;
         });
         return attribute ?? null;
     }
-    export function setInvincibility(
-        villager: Actor,
-        nohurt: boolean,
-        nomovement: boolean
-    ) {
-        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
-            return;
+    export function setInvincibility(villager: Actor, nohurt: boolean, nomovement: boolean) {
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return;
 
         if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
         else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
 
-        nomovement
-            ? villager.addTag(TraderMgmt.Invincbility.NoMovement)
-            : villager.removeTag(TraderMgmt.Invincbility.NoMovement);
+        nomovement ? villager.addTag(TraderMgmt.Invincbility.NoMovement) : villager.removeTag(TraderMgmt.Invincbility.NoMovement);
 
         villager.setStatusFlag(ActorFlags.NoAI, nomovement);
     }
     export function getInvincibility(villager: Actor) {
-        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager))
-            return { NoHurt: false, NoMovement: false };
+        if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return { NoHurt: false, NoMovement: false };
         return {
             NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
             NoMovement: villager.hasTag(TraderMgmt.Invincbility.NoMovement),
@@ -254,40 +216,13 @@ CustomTrade.onVillagerInteract.on((ev) => {
             if (resp === EditorWindow.MainMenuChoices.AddSimpleRecipe) {
                 OpenTo.AddSimpleRecipe(ni).then((resp) => {
                     if (resp === null) return;
-                    const [
-                        buyAItemName,
-                        buyACount,
-                        buyBItemName,
-                        buyBCount,
-                        sellItemName,
-                        sellCount,
-                    ] = resp;
+                    const [buyAItemName, buyACount, buyBItemName, buyBCount, sellItemName, sellCount] = resp;
 
-                    const buyA = ItemStack.constructWith(
-                        buyAItemName,
-                        buyACount
-                    );
-                    const buyB = ItemStack.constructWith(
-                        buyBItemName,
-                        buyBCount
-                    );
-                    const sell = ItemStack.constructWith(
-                        sellItemName,
-                        sellCount
-                    );
-                    TraderMgmt.addSimpleRecipe(
-                        villager,
-                        buyA,
-                        buyB,
-                        sell,
-                        false
-                    );
-                    TraderCommand.dynamicAddRecipeOutput(
-                        player,
-                        buyA,
-                        buyB,
-                        sell
-                    );
+                    const buyA = ItemStack.constructWith(buyAItemName, buyACount);
+                    const buyB = ItemStack.constructWith(buyBItemName, buyBCount);
+                    const sell = ItemStack.constructWith(sellItemName, sellCount);
+                    TraderMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
+                    TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
                     buyA.destruct();
                     buyB.destruct();
                     sell.destruct();
@@ -300,34 +235,18 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     if (!confirmed) return;
 
                     TraderMgmt.removeAllRecipes(villager);
-                    CustomTrade.SendTranslated(
-                        player,
-                        "removeAllRecipes.success"
-                    );
+                    CustomTrade.SendTranslated(player, "removeAllRecipes.success");
                 });
             }
             if (resp === EditorWindow.MainMenuChoices.SetProperties) {
                 const invc = TraderMgmt.getInvincibility(villager);
-                OpenTo.SetProperties(
-                    ni,
-                    new TraderMgmt.Properties(
-                        villager.getName(),
-                        invc.NoHurt,
-                        invc.NoMovement
-                    )
-                ).then((resp) => {
+                OpenTo.SetProperties(ni, new TraderMgmt.Properties(villager.getName(), invc.NoHurt, invc.NoMovement)).then((resp) => {
                     if (resp === null) return;
                     const [Name, NoHurt, NoMovement] = resp;
                     if (!villager.ctxbase.isValid()) return;
                     TraderMgmt.setInvincibility(villager, NoHurt, NoMovement);
                     villager.setNameTag(Name);
-                    CustomTrade.SendTranslated(
-                        player,
-                        "command.properties.success",
-                        Name,
-                        NoHurt,
-                        NoMovement
-                    );
+                    CustomTrade.SendTranslated(player, "command.properties.success", Name, NoHurt, NoMovement);
                 });
             }
         });

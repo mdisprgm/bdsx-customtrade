@@ -92,9 +92,7 @@ export namespace EditorWindow {
         ],
     };
 
-    export function createSetProperties(
-        prop: TraderMgmt.Properties
-    ): FormDataCustom {
+    export function createSetProperties(prop: TraderMgmt.Properties): FormDataCustom {
         return {
             type: "custom_form",
             title: VILLAGER_EDITOR_TITLE,

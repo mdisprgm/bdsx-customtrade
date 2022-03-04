@@ -12,7 +12,7 @@ export const Item$setIsGlint = CustomTrade.hacker.hooking(
     void_t,
     null,
     Item,
-    bool_t
+    bool_t,
 )((self, value) => {
     return Item$setIsGlint(self, value);
 });
@@ -22,7 +22,7 @@ export const Player$setCarriedItem = CustomTrade.hacker.hooking(
     void_t,
     null,
     Player,
-    ItemStack
+    ItemStack,
 )((self, item) => {
     return Player$setCarriedItem(self, item);
 });

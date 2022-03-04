@@ -18,11 +18,9 @@ export namespace VillagerTradeAPI {
     export const RECIPE_DEFAULT_TIER = CustomTrade.RECIPE_DEFAULT_TIER;
     export const RECIPE_MAX_USES = CustomTrade.RECIPE_MAX_USES;
 
-    export const RECIPE_DEFAULT_TRADER_EXP =
-        CustomTrade.RECIPE_DEFAULT_TRADER_EXP;
+    export const RECIPE_DEFAULT_TRADER_EXP = CustomTrade.RECIPE_DEFAULT_TRADER_EXP;
 
-    export const RECIPE_DEFAULT_PRICE_MULTIPLIER =
-        CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER;
+    export const RECIPE_DEFAULT_PRICE_MULTIPLIER = CustomTrade.RECIPE_DEFAULT_PRICE_MULTIPLIER;
 
     export const RECIPE_DEFAULT_DEMAND = CustomTrade.RECIPE_DEFAULT_DEMAND;
 }
