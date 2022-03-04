@@ -14,25 +14,19 @@ import * as path from "path";
 import { VillagerInteractEvent } from "./src/event";
 
 console.log("[CustomTrade] allocated");
-
 events.serverOpen.on(() => {
     console.log("[CustomTrade] launching");
 });
-
 events.serverClose.on(() => {
     console.log("[CustomTrade] closed");
 });
-
 bedrockServer.afterOpen().then(() => {
     require("./src");
 });
 
 function loadConfig() {
     try {
-        const f = fs.readFileSync(
-            path.join(__dirname, "./config.json"),
-            "utf8"
-        );
+        const f = fs.readFileSync(path.join(__dirname, "./config.json"), "utf8");
         return JSON.parse(f);
     } catch (err) {
         throw err;
@@ -61,31 +55,21 @@ export namespace CustomTrade {
         }
         return str;
     }
-    export function SendTranslated(
-        player: ServerPlayer,
-        key: string,
-        ...args: any[]
-    ) {
+    export function SendTranslated(player: ServerPlayer, key: string, ...args: any[]) {
         const message = Translate(key, ...args);
         player.sendMessage(message);
     }
 
-    export const hacker = ProcHacker.load(
-        path.join(CustomTrade.DIRNAME, "./hacker.ini"),
-        ["Item::setIsGlint", "Player::setCarriedItem"],
-        UNDNAME_NAME_ONLY
-    );
+    export const hacker = ProcHacker.load(path.join(CustomTrade.DIRNAME, "./hacker.ini"), ["Item::setIsGlint", "Player::setCarriedItem"], UNDNAME_NAME_ONLY);
     export function IsWand(item: ItemStack): boolean {
         const tag = item.allocateAndSave();
-        const data = tag
-            .get<CompoundTag>("tag")
-            ?.get<ByteTag>("IsCustomTradeWand")?.data;
+        const data = tag.get<CompoundTag>("tag")?.get<ByteTag>("IsCustomTradeWand")?.data;
         const ret = Boolean(data);
         tag.dispose();
         return ret;
     }
-    export const VILLAGER = "minecraft:villager_v2";
-    export const WANDERING_TRADER = "minecraft:wandering_trader";
+    export const VILLAGER: EntityId = "minecraft:villager_v2";
+    export const WANDERING_TRADER: EntityId = "minecraft:wandering_trader";
 
     /**
      *
@@ -111,7 +95,7 @@ export namespace CustomTrade {
         traderExp: number = RECIPE_DEFAULT_TRADER_EXP,
         maxUses: number = RECIPE_MAX_USES,
         tier: number = RECIPE_DEFAULT_TIER,
-        destruct: boolean = true
+        destruct: boolean = true,
     ): Tag {
         if (tier > RECIPE_MAX_TIER) tier = RECIPE_MAX_TIER;
 
@@ -167,9 +151,7 @@ export namespace CustomTrade {
         return isAir;
     }
 
-    export const onVillagerInteract = new Event<
-        (event: VillagerInteractEvent) => void | CANCEL
-    >();
+    export const onVillagerInteract = new Event<(event: VillagerInteractEvent) => void | CANCEL>();
 }
 
 events.serverLeave.on(() => {
@@ -180,10 +162,7 @@ const CONFIG = loadConfig();
 if (!CONFIG.lang) {
     throw new Error("`lang` is undefined in the config");
 }
-const lang = CONFIG.lang;
-const f = fs.readFileSync(
-    path.join(CustomTrade.DIRNAME, `./data/lang/${lang}.ini`),
-    "utf8"
-);
+const langFile = CONFIG.lang;
+const langDB = fs.readFileSync(path.join(CustomTrade.DIRNAME, `./data/lang/${langFile}.ini`), "utf8");
 
-const __TRANSLATOR__ = ini.parse(f);
+const __TRANSLATOR__ = ini.parse(langDB);
