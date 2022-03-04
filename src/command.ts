@@ -44,11 +44,7 @@ export namespace TraderCommand {
 const cmd_trader = command.register("custom_trader", "custom trader commands", CommandPermissionLevel.Operator);
 cmd_trader.alias("tradermgmt");
 
-class EditingTarget {
-    constructor(public readonly id: ActorUniqueID, public readonly pos: Vec3) {}
-}
-
-export const EditingTargets = new Map<NetworkIdentifier, Set<EditingTarget>>();
+const EditingTargets = new Map<NetworkIdentifier, Set<ActorUniqueID>>();
 
 events.playerJoin.on((ev) => {
     const ni = ev.player.getNetworkIdentifier();
@@ -59,7 +55,7 @@ events.networkDisconnected.on((ni) => {
     EditingTargets.delete(ni);
 });
 
-function GetTargets(from: ServerPlayer): Set<EditingTarget> | null {
+function GetTargets(from: ServerPlayer): Set<ActorUniqueID> | null {
     return EditingTargets.get(from.getNetworkIdentifier()) ?? null;
 }
 function DeleteTargets(from: ServerPlayer): boolean {
@@ -91,7 +87,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
 
     if (player.isSneaking()) {
         if (ev.transaction.actionType !== ItemUseOnActorInventoryTransaction.ActionType.Attack) {
-            EditingTargets.get(ni)?.add(new EditingTarget(villager.getUniqueIdBin(), Vec3.construct(villPos)));
+            EditingTargets.get(ni)?.add(villager.getUniqueIdBin());
             CustomTrade.SendTranslated(player, "editingTarget.selected", villPos.x.toFixed(2), villPos.y.toFixed(2), villPos.z.toFixed(2));
         } else {
             if (EditingTargets.has(ni)) {
@@ -163,7 +159,7 @@ cmd_trader.overload(
         if (!targets) return;
 
         for (const target of targets) {
-            const entity = Actor.fromUniqueIdBin(target.id);
+            const entity = Actor.fromUniqueIdBin(target);
             if (!entity) return;
 
             TraderMgmt.setInvincibility(entity, p.NoHurt, p.NoMovement);
@@ -203,7 +199,7 @@ cmd_trader.overload(
         if (!targets) return;
 
         for (const target of targets) {
-            const villager = Actor.fromUniqueIdBin(target.id);
+            const villager = Actor.fromUniqueIdBin(target);
             if (!villager) continue;
             TraderMgmt.removeRecipe(villager, p.index);
         }
@@ -225,7 +221,7 @@ cmd_trader.overload(
         if (!targets) return;
 
         for (const target of targets) {
-            const villager = Actor.fromUniqueIdBin(target.id);
+            const villager = Actor.fromUniqueIdBin(target);
             if (!villager) continue;
             TraderMgmt.removeAllRecipes(villager);
         }
@@ -258,7 +254,7 @@ cmd_trader.overload(
         const sell = recreateItemInstance(p.sell.createInstance(1), p.countSell, p.dataSell);
 
         for (const target of targets) {
-            const villager = Actor.fromUniqueIdBin(target.id);
+            const villager = Actor.fromUniqueIdBin(target);
             if (!villager) continue;
 
             //items are destructed here
@@ -299,7 +295,7 @@ cmd_trader.overload(
         const sell = recreateItemInstance(p.sell.createInstance(1), p.countSell, p.dataSell);
 
         for (const target of targets) {
-            const villager = Actor.fromUniqueIdBin(target.id);
+            const villager = Actor.fromUniqueIdBin(target);
             if (!villager) continue;
 
             //items are destructed here
