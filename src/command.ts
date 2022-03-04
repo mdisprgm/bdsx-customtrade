@@ -52,7 +52,8 @@ export const EditingTargets = new Map<NetworkIdentifier, Set<EditingTarget>>();
 
 events.playerJoin.on((ev) => {
     const ni = ev.player.getNetworkIdentifier();
-    EditingTargets.get(ni)?.clear();
+    EditingTargets.delete(ni);
+    EditingTargets.set(ni, new Set());
 });
 events.networkDisconnected.on((ni) => {
     EditingTargets.delete(ni);
