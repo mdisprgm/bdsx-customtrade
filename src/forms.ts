@@ -1,8 +1,11 @@
-import { FormDataCustom, FormDataSimple } from "bdsx/bds/form";
+import { EnchantmentNames } from "bdsx/bds/enchants";
+import { FormDataCustom, FormDataSimple, FormItemInput } from "bdsx/bds/form";
 import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
 
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
+
+const Translate = CustomTrade.Translate;
 export namespace EditorWindow {
     export enum MainMenuChoices {
         AddSimpleRecipe = 0,
@@ -13,24 +16,24 @@ export namespace EditorWindow {
     export const ChooseMenu: FormDataSimple = {
         type: "form",
         title: VILLAGER_EDITOR_TITLE,
-        content: CustomTrade.Translate("chooseMenu.chooseMenu"),
+        content: Translate("chooseMenu.chooseMenu"),
         buttons: [
             {
-                text: CustomTrade.Translate("chooseMenu.AddRecipe"),
+                text: Translate("chooseMenu.AddRecipe"),
                 image: {
                     type: "path",
                     data: "textures/ui/MCoin",
                 },
             },
             {
-                text: CustomTrade.Translate("chooseMenu.RemoveAllRecipes"),
+                text: Translate("chooseMenu.RemoveAllRecipes"),
                 image: {
                     type: "path",
                     data: "textures/blocks/barrier",
                 },
             },
             {
-                text: CustomTrade.Translate("chooseMenu.SetInvincibility"),
+                text: Translate("chooseMenu.SetInvincibility"),
                 image: {
                     type: "path",
                     data: "textures/items/turtle_helmet",
@@ -44,11 +47,11 @@ export namespace EditorWindow {
         content: [
             {
                 type: "label",
-                text: CustomTrade.Translate("removeAllRecipes.warning"),
+                text: Translate("removeAllRecipes.warning"),
             },
             {
                 type: "toggle",
-                text: CustomTrade.Translate("removeAllRecipes.understand"),
+                text: Translate("removeAllRecipes.understand"),
             },
         ],
     };
@@ -58,36 +61,48 @@ export namespace EditorWindow {
         content: [
             {
                 type: "input",
-                text: CustomTrade.Translate("addSimpleRecipe.input.buyA.itemName"),
+                text: Translate("addSimpleRecipe.input.buyA.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addSimpleRecipe.input.buyA.count"),
+                text: Translate("addSimpleRecipe.input.buyA.count"),
                 max: 64,
                 min: 1,
                 default: 1,
+            },
+            {
+                type: "toggle",
+                text: Translate("addSimpleRecipe.input.enchanted"),
             },
             {
                 type: "input",
-                text: CustomTrade.Translate("addSimpleRecipe.input.buyB.itemName"),
+                text: Translate("addSimpleRecipe.input.buyB.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addSimpleRecipe.input.buyB.count"),
+                text: Translate("addSimpleRecipe.input.buyB.count"),
                 max: 64,
                 min: 1,
                 default: 1,
+            },
+            {
+                type: "toggle",
+                text: Translate("addSimpleRecipe.input.enchanted"),
             },
             {
                 type: "input",
-                text: CustomTrade.Translate("addSimpleRecipe.input.sell.itemName"),
+                text: Translate("addSimpleRecipe.input.sell.itemName"),
             },
             {
                 type: "slider",
-                text: CustomTrade.Translate("addSimpleRecipe.input.sell.count"),
+                text: Translate("addSimpleRecipe.input.sell.count"),
                 max: 64,
                 min: 1,
                 default: 1,
+            },
+            {
+                type: "toggle",
+                text: Translate("addSimpleRecipe.input.enchanted"),
             },
         ],
     };
@@ -99,17 +114,17 @@ export namespace EditorWindow {
             content: [
                 {
                     type: "input",
-                    text: CustomTrade.Translate("setProp.entity.name"),
+                    text: Translate("setProp.entity.name"),
                     default: prop.name,
                 },
                 {
                     type: "toggle",
-                    text: CustomTrade.Translate("setInvc.passive.nohurt"),
+                    text: Translate("setInvc.passive.nohurt"),
                     default: prop.noHurt,
                 },
                 {
                     type: "toggle",
-                    text: CustomTrade.Translate("setInvc.passive.nomovement"),
+                    text: Translate("setInvc.passive.nomovement"),
                     default: prop.noMovement,
                 },
             ],
@@ -124,14 +139,36 @@ export namespace EditorWindow {
         content: [
             {
                 type: "toggle",
-                text: CustomTrade.Translate("setInvc.passive.nohurt"),
+                text: Translate("setInvc.passive.nohurt"),
                 default: false,
             },
             {
                 type: "toggle",
-                text: CustomTrade.Translate("setInvc.passive.nomovement"),
+                text: Translate("setInvc.passive.nomovement"),
                 default: false,
             },
         ],
     };
+    const enchNames = Object.keys(EnchantmentNames).filter((v) => isNaN(Number(v))) as string[];
+    const enchant_contents: FormItemInput[] = [];
+    for (const v of enchNames) {
+        enchant_contents.push({
+            type: "input",
+            text: Translate("recipe.enchantments.levelOf", v) + "§a",
+            placeholder: "Level",
+        });
+    }
+    export function createEnchanting(itemStr: string): FormDataCustom {
+        return {
+            type: "custom_form",
+            title: VILLAGER_EDITOR_TITLE,
+            content: [
+                {
+                    type: "label",
+                    text: Translate("recipe.enchantments.main", itemStr),
+                },
+                ...enchant_contents,
+            ],
+        };
+    }
 }

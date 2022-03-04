@@ -1,4 +1,5 @@
 import { Actor, ActorFlags } from "bdsx/bds/actor";
+import { EnchantUtils } from "bdsx/bds/enchants";
 import { Form } from "bdsx/bds/form";
 import { ItemStack } from "bdsx/bds/inventory";
 import { NBT } from "bdsx/bds/nbt";
@@ -26,8 +27,12 @@ namespace OpenTo {
         return await Form.sendTo(target, EditorWindow.RemoveAllRecipes);
     }
 
-    export async function SetProperties(target: NetworkIdentifier, prop: TraderMgmt.Properties) {
+    export async function SetProperties(target: NetworkIdentifier, prop: TraderMgmt.Properties): Promise<any[] | null> {
         return await Form.sendTo(target, EditorWindow.createSetProperties(prop));
+    }
+
+    export async function RequestEnchantments(target: NetworkIdentifier, itemStr: string): Promise<any[] | null> {
+        return await Form.sendTo(target, EditorWindow.createEnchanting(itemStr));
     }
 }
 export namespace TraderMgmt {
@@ -184,35 +189,67 @@ events.entityCreated.on((ev) => {
     }
 });
 
+/**
+ * @param item item to apply enchant
+ * @param data response from {@link OpenTo.RequestEnchantments}
+ */
+function applyEnchantments(item: ItemStack, data: any[] | null): void {
+    if (data !== null) {
+        for (let i = 1; i < data.length; i++) {
+            const ench = i - 1;
+            const lvl = Number(data[i]);
+            if (lvl) EnchantUtils.applyEnchant(item, ench, lvl, true);
+        }
+    }
+}
 CustomTrade.onVillagerInteract.on((ev) => {
+    if (!CustomTrade.IsWand(ev.item)) return;
+
     const player = ev.player;
     const ni = player.getNetworkIdentifier();
     const villager = ev.villager;
-    const item = ev.item;
-    if (!CustomTrade.IsWand(item)) return;
-    if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
-        Player$setCarriedItem(player, CustomTrade.AIR_ITEM);
-        return;
-    }
-    if (!player.isSneaking()) {
-        OpenTo.ChooseMenu(ni).then((resp) => {
-            if (resp === null) return;
-            if (resp === EditorWindow.MainMenuChoices.AddSimpleRecipe) {
-                OpenTo.AddSimpleRecipe(ni).then((resp) => {
-                    if (resp === null) return;
-                    const [buyAItemName, buyACount, buyBItemName, buyBCount, sellItemName, sellCount] = resp;
 
-                    const buyA = ItemStack.constructWith(buyAItemName, buyACount);
-                    const buyB = ItemStack.constructWith(buyBItemName, buyBCount);
-                    const sell = ItemStack.constructWith(sellItemName, sellCount);
-                    TraderMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
-                    TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
-                    buyA.destruct();
-                    buyB.destruct();
-                    sell.destruct();
-                });
+    (async () => {
+        if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
+            Player$setCarriedItem(player, CustomTrade.AIR_ITEM);
+            return;
+        }
+        if (!player.isSneaking()) {
+            const respMenu = await OpenTo.ChooseMenu(ni);
+
+            if (respMenu === null) return;
+            if (respMenu === EditorWindow.MainMenuChoices.AddSimpleRecipe) {
+                const respRec = await OpenTo.AddSimpleRecipe(ni);
+                if (respRec === null) return;
+                const [buyAItemName, buyACount, buyAEnchanted, buyBItemName, buyBCount, buyBEnchanted, sellItemName, sellCount, sellEnchanted] = respRec;
+
+                const buyA = ItemStack.constructWith(buyAItemName, buyACount);
+                const buyB = ItemStack.constructWith(buyBItemName, buyBCount);
+                const sell = ItemStack.constructWith(sellItemName, sellCount);
+
+                if (buyAEnchanted) {
+                    const item = buyA;
+                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
+                    applyEnchantments(buyA, await OpenTo.RequestEnchantments(ni, itemStr));
+                }
+                if (buyBEnchanted) {
+                    const item = buyB;
+                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
+                    applyEnchantments(buyB, await OpenTo.RequestEnchantments(ni, itemStr));
+                }
+                if (sellEnchanted) {
+                    const item = sell;
+                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
+                    applyEnchantments(sell, await OpenTo.RequestEnchantments(ni, itemStr));
+                }
+
+                TraderMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
+                TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+                buyA.destruct();
+                buyB.destruct();
+                sell.destruct();
             }
-            if (resp === EditorWindow.MainMenuChoices.RemoveAllRecipes) {
+            if (respMenu === EditorWindow.MainMenuChoices.RemoveAllRecipes) {
                 OpenTo.RemoveAllRecipes(ni).then((resp) => {
                     if (resp === null) return;
                     const [, confirmed] = resp;
@@ -222,7 +259,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     CustomTrade.SendTranslated(player, "removeAllRecipes.success");
                 });
             }
-            if (resp === EditorWindow.MainMenuChoices.SetProperties) {
+            if (respMenu === EditorWindow.MainMenuChoices.SetProperties) {
                 const invc = TraderMgmt.getInvincibility(villager);
                 OpenTo.SetProperties(ni, new TraderMgmt.Properties(villager.getName(), invc.NoHurt, invc.NoMovement)).then((resp) => {
                     if (resp === null) return;
@@ -233,12 +270,11 @@ CustomTrade.onVillagerInteract.on((ev) => {
                     CustomTrade.SendTranslated(player, "command.properties.success", Name, NoHurt, NoMovement);
                 });
             }
-        });
-        return CANCEL;
-    } /*
-    else >>> src/command.ts
-    */
+        }
+    })();
+    return CANCEL;
 });
+
 /**
  * Sample
  * Offers . Recipes
