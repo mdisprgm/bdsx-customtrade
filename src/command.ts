@@ -1,5 +1,4 @@
 import { Actor, ActorUniqueID } from "bdsx/bds/actor";
-import { Vec3 } from "bdsx/bds/blockpos";
 import { ActorCommandSelector, CommandItem, CommandPermissionLevel } from "bdsx/bds/command";
 import { ItemStack, ItemUseOnActorInventoryTransaction } from "bdsx/bds/inventory";
 import { CompoundTag, NBT } from "bdsx/bds/nbt";
@@ -126,7 +125,7 @@ cmd_trader.overload(
         wandTag.dispose();
     },
     {
-        option: command.enum("CustomTradeWand", "wand"),
+        option: command.enum("trader.wand", "wand"),
     },
 );
 
@@ -142,7 +141,7 @@ cmd_trader.overload(
         }
     },
     {
-        option: command.enum("Speed", "speed"),
+        option: command.enum("trader.speed", "speed"),
         targets: ActorCommandSelector,
         value: float32_t,
     },
@@ -169,7 +168,7 @@ cmd_trader.overload(
         CustomTrade.SendTranslated(player, "command.properties.success", p.Name, p.NoHurt, p.NoMovement);
     },
     {
-        option: command.enum("Properties", "prop", "properties"),
+        option: command.enum("trader.properies", "prop", "properties"),
         Name: CxxString,
         NoHurt: bool_t,
         NoMovement: bool_t,
@@ -186,7 +185,7 @@ cmd_trader.overload(
         CustomTrade.SendTranslated(player, "command.init_targets.success");
     },
     {
-        opt1: command.enum("RecipeInitTargets", "init"),
+        opt1: command.enum("recipe.init.targets", "init"),
     },
 );
 
@@ -207,7 +206,7 @@ cmd_trader.overload(
     },
     {
         option: CommandRecipeOption,
-        remove: command.enum("RecipeRemove", "remove"),
+        remove: command.enum("recipe.remove", "remove"),
         index: int32_t,
     },
 );
@@ -229,7 +228,7 @@ cmd_trader.overload(
     },
     {
         option: CommandRecipeOption,
-        remove_all: command.enum("RecipeRemoveAll", "remove_all"),
+        remove_all: command.enum("recipe.remove_all", "remove_all"),
     },
 );
 
@@ -268,7 +267,7 @@ cmd_trader.overload(
     },
     {
         option: CommandRecipeOption,
-        opt1: command.enum("RecipeAddSim", "add_simple"),
+        opt1: command.enum("recipe.add_simple", "add_simple"),
         buyA: CommandItem,
         countA: int32_t,
         dataA: int32_t,
@@ -309,7 +308,7 @@ cmd_trader.overload(
     },
     {
         option: CommandRecipeOption,
-        opt1: command.enum("RecipeAdd", "add"),
+        opt1: command.enum("recipe.add", "add"),
         buyA: CommandItem,
         countA: int32_t,
         dataA: int32_t,
