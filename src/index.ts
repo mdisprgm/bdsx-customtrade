@@ -1,4 +1,4 @@
-import { Actor, ActorFlags } from "bdsx/bds/actor";
+import { Actor, ActorFlags, Mob } from "bdsx/bds/actor";
 import { EnchantUtils } from "bdsx/bds/enchants";
 import { Form } from "bdsx/bds/form";
 import { ItemStack } from "bdsx/bds/inventory";
@@ -36,7 +36,7 @@ namespace OpenTo {
     }
 }
 export namespace TraderMgmt {
-    export function isValidTrader(villager: Actor) {
+    export function isValidTrader(villager: Actor): villager is Mob {
         const id = villager.getIdentifier();
         const validId = id === CustomTrade.VILLAGER || id === CustomTrade.WANDERING_TRADER;
         return validId && villager.save().Offers?.Recipes !== undefined && villager.ctxbase.isValid();
