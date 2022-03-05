@@ -138,7 +138,6 @@ export namespace CustomTrade {
 
         return NBT.allocate(retTag);
     }
-    export const AIR_ITEM = ItemStack.constructWith("minecraft:air", 1);
 
     /**
      * @param item Item to check
@@ -153,10 +152,6 @@ export namespace CustomTrade {
 
     export const onVillagerInteract = new Event<(event: VillagerInteractEvent) => void | CANCEL>();
 }
-
-events.serverLeave.on(() => {
-    CustomTrade.AIR_ITEM.destruct();
-});
 
 const CONFIG = loadConfig();
 if (!CONFIG.lang) {

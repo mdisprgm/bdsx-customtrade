@@ -80,7 +80,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
     const item = player.getMainhandSlot();
     if (!CustomTrade.IsWand(item)) return;
     if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
-        Player$setCarriedItem(player, CustomTrade.AIR_ITEM);
+        Player$setCarriedItem(player, ItemStack.EMPTY_ITEM);
         return;
     }
 
