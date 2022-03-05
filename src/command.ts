@@ -25,17 +25,17 @@ export namespace TraderCommand {
     }
     export function dynamicAddRecipeOutput(player: ServerPlayer, buyA: ItemStack, buyB: ItemStack, sell: ItemStack) {
         if (CustomTrade.IsAir(buyB, false)) {
-            CustomTrade.SendTranslated(player, "addRecipe.success", `${buyA.getName()}`, `${buyA.getAmount()}`, `${sell.getName()}`, `${sell.getAmount()}`);
+            CustomTrade.SendTranslated(player, "addRecipe.success", buyA.getName(), buyA.getAmount(), sell.getName(), sell.getAmount());
         } else {
             CustomTrade.SendTranslated(
                 player,
                 "addRecipe.buyB.success",
-                `${buyA.getName()}`,
-                `${buyA.getAmount()}`,
-                `${buyB.getName()}`,
-                `${buyB.getAmount()}`,
-                `${sell.getName()}`,
-                `${sell.getAmount()}`,
+                buyA.getName(),
+                buyA.getAmount(),
+                buyB.getName(),
+                buyB.getAmount(),
+                sell.getName(),
+                sell.getAmount(),
             );
         }
     }
