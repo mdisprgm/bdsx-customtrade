@@ -1,6 +1,4 @@
-import { Item, ItemStack } from "bdsx/bds/inventory";
-import { Player } from "bdsx/bds/player";
-import { pdb } from "bdsx/core";
+import { Item } from "bdsx/bds/inventory";
 import { bool_t, void_t } from "bdsx/nativetype";
 import { CustomTrade } from "..";
 
@@ -16,14 +14,3 @@ export const Item$setIsGlint = CustomTrade.hacker.hooking(
 )((self, value) => {
     return Item$setIsGlint(self, value);
 });
-
-export const Player$setCarriedItem = CustomTrade.hacker.hooking(
-    "Player::setCarriedItem",
-    void_t,
-    null,
-    Player,
-    ItemStack,
-)((self, item) => {
-    return Player$setCarriedItem(self, item);
-});
-pdb.close();

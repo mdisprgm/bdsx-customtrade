@@ -12,7 +12,6 @@ import "./command";
 import { TraderCommand } from "./command";
 import "./event";
 import { EditorWindow } from "./forms";
-import { Player$setCarriedItem } from "./hacker";
 
 namespace OpenTo {
     export async function ChooseMenu(target: NetworkIdentifier): Promise<number | null> {
@@ -211,7 +210,8 @@ CustomTrade.onVillagerInteract.on((ev) => {
 
     (async () => {
         if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
-            Player$setCarriedItem(player, ItemStack.EMPTY_ITEM);
+            player.setCarriedItem(ItemStack.EMPTY_ITEM);
+            player.sendInventory();
             return;
         }
         if (!player.isSneaking()) {

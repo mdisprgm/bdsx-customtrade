@@ -10,7 +10,6 @@ import { events } from "bdsx/event";
 import { bool_t, CxxString, float32_t, int32_t } from "bdsx/nativetype";
 import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
-import { Player$setCarriedItem } from "./hacker";
 
 export namespace TraderCommand {
     export function assertHasTargets(player: ServerPlayer): number {
@@ -72,19 +71,20 @@ function HasTargets(from: ServerPlayer): number {
 
 CustomTrade.onVillagerInteract.on((ev) => {
     const player = ev.player;
-    const villager = ev.villager;
-    const villPos = villager.getPosition();
-
-    const ni = player.getNetworkIdentifier();
-    if (!TraderMgmt.isValidTrader(villager)) return;
-    const item = player.getMainhandSlot();
-    if (!CustomTrade.IsWand(item)) return;
-    if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
-        Player$setCarriedItem(player, ItemStack.EMPTY_ITEM);
-        return;
-    }
-
     if (player.isSneaking()) {
+        const villager = ev.villager;
+        const villPos = villager.getPosition();
+
+        const ni = player.getNetworkIdentifier();
+        if (!TraderMgmt.isValidTrader(villager)) return;
+        const item = player.getMainhandSlot();
+        if (!CustomTrade.IsWand(item)) return;
+        if (player.getPermissionLevel() !== PlayerPermission.OPERATOR) {
+            player.setCarriedItem(ItemStack.EMPTY_ITEM);
+            player.sendInventory();
+            return;
+        }
+
         if (ev.transaction.actionType !== ItemUseOnActorInventoryTransaction.ActionType.Attack) {
             EditingTargets.get(ni)?.add(villager.getUniqueIdBin());
             CustomTrade.SendTranslated(player, "editingTarget.selected", villPos.x.toFixed(2), villPos.y.toFixed(2), villPos.z.toFixed(2));
