@@ -221,22 +221,12 @@ CustomTrade.onVillagerInteract.on((ev) => {
             if (respMenu === EditorWindow.MainMenuChoices.AddSimpleRecipe) {
                 const respRec = await OpenTo.AddSimpleRecipe(ni);
                 if (respRec === null) return;
-                const [buyAItemName, buyACount, buyAEnchanted, buyBItemName, buyBCount, buyBEnchanted, sellItemName, sellCount, sellEnchanted] = respRec;
+                const [buyAItemName, buyACount, buyBItemName, buyBCount, sellItemName, sellCount, sellEnchanted] = respRec;
 
                 const buyA = ItemStack.constructWith(buyAItemName, buyACount);
                 const buyB = ItemStack.constructWith(buyBItemName, buyBCount);
                 const sell = ItemStack.constructWith(sellItemName, sellCount);
 
-                if (buyAEnchanted) {
-                    const item = buyA;
-                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
-                    applyEnchantments(buyA, await OpenTo.RequestEnchantments(ni, itemStr));
-                }
-                if (buyBEnchanted) {
-                    const item = buyB;
-                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
-                    applyEnchantments(buyB, await OpenTo.RequestEnchantments(ni, itemStr));
-                }
                 if (sellEnchanted) {
                     const item = sell;
                     const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
@@ -245,6 +235,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
 
                 TraderMgmt.addSimpleRecipe(villager, buyA, buyB, sell, false);
                 TraderCommand.dynamicAddRecipeOutput(player, buyA, buyB, sell);
+
                 buyA.destruct();
                 buyB.destruct();
                 sell.destruct();

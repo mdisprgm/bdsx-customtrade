@@ -71,10 +71,6 @@ export namespace EditorWindow {
                 default: 1,
             },
             {
-                type: "toggle",
-                text: Translate("addSimpleRecipe.input.enchanted"),
-            },
-            {
                 type: "input",
                 text: Translate("addSimpleRecipe.input.buyB.itemName"),
             },
@@ -84,10 +80,6 @@ export namespace EditorWindow {
                 max: 64,
                 min: 1,
                 default: 1,
-            },
-            {
-                type: "toggle",
-                text: Translate("addSimpleRecipe.input.enchanted"),
             },
             {
                 type: "input",

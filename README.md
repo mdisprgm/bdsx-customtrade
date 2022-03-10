@@ -44,6 +44,10 @@ The plugin for bdsx
 
 -   Add: enchanted recipes with Form UI
 
+### 22.03.10
+
+-   Fix: only sell items can be enchanted
+
 # Tip
 
 -   You can set your langauges, in `config.json`:
