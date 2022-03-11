@@ -15,9 +15,9 @@ custom_trader wand
 
 ## Select
 
-Right-Click(Interact)<br>
+Right-Click with Sneaking (Interact)<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/action_interact_to_push_to_list.png" alt="action_interact_to_push_to_list" width="450"/><br><br>
-Left-Click(Attack)<br>
+Left-Click with Sneaking (Attack)<br>
 <img src="https://raw.githubusercontent.com/mdisprgm/bdsx-customtrade/main/resource/tutorial/action_attack_to_remove_from_list.png" alt="action_attack_to_remove_from_list" width="450"/>
 
 <br>
