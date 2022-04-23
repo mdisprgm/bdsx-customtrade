@@ -14,7 +14,7 @@ export class VillagerInteractEvent {
 }
 
 events.packetBefore(MinecraftPacketIds.InventoryTransaction).on((pkt, ni, id) => {
-    if (pkt.transaction.isItemUseOnEntityTransaction()) {
+    if (pkt.transaction?.isItemUseOnEntityTransaction()) {
         const player = ni.getActor();
         if (!player?.isPlayer()) return;
 
