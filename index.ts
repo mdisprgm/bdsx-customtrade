@@ -3,11 +3,10 @@ import { ItemStack } from "bdsx/bds/inventory";
 import { ByteTag, CompoundTag, NBT, Tag } from "bdsx/bds/nbt";
 import { ServerPlayer } from "bdsx/bds/player";
 import { CANCEL } from "bdsx/common";
-import { UNDNAME_NAME_ONLY } from "bdsx/dbghelp";
 import { events } from "bdsx/event";
 import { Event } from "bdsx/eventtarget";
 import { bedrockServer } from "bdsx/launcher";
-import { ProcHacker } from "bdsx/prochacker";
+import { procHacker } from "bdsx/prochacker";
 import * as fs from "fs";
 import * as ini from "ini";
 import * as path from "path";
@@ -60,7 +59,7 @@ export namespace CustomTrade {
         player.sendMessage(message);
     }
 
-    export const hacker = ProcHacker.load(path.join(CustomTrade.DIRNAME, "./hacker.ini"), ["Item::setIsGlint", "Player::setCarriedItem"], UNDNAME_NAME_ONLY);
+    export const hacker = procHacker; //ProcHacker.load(path.join(CustomTrade.DIRNAME, "./hacker.ini"), ["Item::setIsGlint", "Player::setCarriedItem"], UNDNAME_NAME_ONLY);
     export function IsWand(item: ItemStack): boolean {
         const tag = item.allocateAndSave();
         const data = tag.get<CompoundTag>("tag")?.get<ByteTag>("IsCustomTradeWand")?.data;

@@ -1,13 +1,13 @@
 import { Item } from "bdsx/bds/inventory";
-import { bool_t, void_t } from "bdsx/nativetype";
+import { bool_t } from "bdsx/nativetype";
 import { CustomTrade } from "..";
 
 /**
- * @deprecated doesn't work yet
+ * @deprecated not finished yet.
  */
 export const Item$setIsGlint = CustomTrade.hacker.hooking(
-    "Item::setIsGlint",
-    void_t,
+    "?setIsGlint@Item@@UEAAAEAV1@_N@Z",
+    Item,
     null,
     Item,
     bool_t,
