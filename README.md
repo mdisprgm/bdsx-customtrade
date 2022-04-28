@@ -71,6 +71,13 @@ Supported languages list:<br>
 -   copy and paste recipes
 -   improved removing ways, ~~command~~ + Form UI
 
+# TODO (User Suggested)
+
+-   modifying registered recipe.
+-   translated enchantment names
+-   fixing abnormal enchantment level (being unusable, before rejoining)
+-   fixing agree button, for remove_all
+
 # License
 
 MIT
