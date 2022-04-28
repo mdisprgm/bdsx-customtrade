@@ -1,7 +1,8 @@
-import { EnchantmentNames } from "bdsx/bds/enchants";
+import { Enchant } from "bdsx/bds/enchants";
 import { FormDataCustom, FormDataSimple, FormItemInput } from "bdsx/bds/form";
 import { TraderMgmt } from ".";
 import { CustomTrade } from "..";
+import utils from "./utils";
 
 const VILLAGER_EDITOR_TITLE = "§l§aVillager Editor";
 
@@ -141,12 +142,16 @@ export namespace EditorWindow {
             },
         ],
     };
-    const enchNames = Object.keys(EnchantmentNames).filter((v) => isNaN(Number(v))) as string[];
+    const MAX_ENCH_TYPE = Enchant.Type.SoulSpeed;
+    const types = Object.keys(Enchant.Type).filter((v) => {
+        const t = +v;
+        return !isNaN(t) && t <= MAX_ENCH_TYPE;
+    });
     const enchant_contents: FormItemInput[] = [];
-    for (const v of enchNames) {
+    for (const type of types) {
         enchant_contents.push({
             type: "input",
-            text: Translate("recipe.enchantments.levelOf", v) + "§a",
+            text: Translate("recipe.enchantments.levelOf", "%" + utils.translateEnchType(+type)) + "§a",
             placeholder: "Level",
         });
     }
