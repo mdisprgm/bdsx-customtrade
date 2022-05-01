@@ -123,25 +123,6 @@ export namespace EditorWindow {
             ],
         };
     }
-    /**
-     * @deprecated WILL BE DELETED. Use {@link createSetProperties}
-     */
-    export const SetInvincibility: FormDataCustom = {
-        type: "custom_form",
-        title: VILLAGER_EDITOR_TITLE,
-        content: [
-            {
-                type: "toggle",
-                text: Translate("setInvc.passive.nohurt"),
-                default: false,
-            },
-            {
-                type: "toggle",
-                text: Translate("setInvc.passive.nomovement"),
-                default: false,
-            },
-        ],
-    };
     const MAX_ENCH_TYPE = Enchant.Type.SoulSpeed;
     const types = Object.keys(Enchant.Type).filter((v) => {
         const t = +v;

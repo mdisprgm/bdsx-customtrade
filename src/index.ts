@@ -228,8 +228,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
                 const sell = ItemStack.constructWith(sellItemName, sellCount);
 
                 if (sellEnchanted) {
-                    const item = sell;
-                    const itemStr = CustomTrade.Translate("itemInfoStr", item.getName(), item.getAmount());
+                    const itemStr = CustomTrade.Translate("itemInfoStr", sell.getName(), sell.getAmount());
                     applyEnchantments(sell, await OpenTo.RequestEnchantments(ni, itemStr));
                 }
 
