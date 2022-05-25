@@ -59,7 +59,7 @@ export namespace CustomTrade {
         player.sendMessage(message);
     }
 
-    export const hacker = procHacker; //ProcHacker.load(path.join(CustomTrade.DIRNAME, "./hacker.ini"), ["Item::setIsGlint", "Player::setCarriedItem"], UNDNAME_NAME_ONLY);
+    export const hacker = procHacker;
     export function IsWand(item: ItemStack): boolean {
         const tag = item.allocateAndSave();
         const data = tag.get<CompoundTag>("tag")?.get<ByteTag>("IsCustomTradeWand")?.data;
