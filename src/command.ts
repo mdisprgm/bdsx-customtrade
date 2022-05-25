@@ -241,10 +241,7 @@ cmd_trader.overload(
     (p, o, op) => {
         const player = o.getEntity();
         if (!player?.isPlayer()) return;
-        if (!HasTargets(player)) {
-            CustomTrade.SendTranslated(player, "command.addRecipe.error.no_targets");
-            return;
-        }
+        TraderCommand.assertHasTargets(player);
         const targets = GetTargets(player);
         if (!targets) return;
 
