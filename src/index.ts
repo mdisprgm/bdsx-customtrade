@@ -51,7 +51,7 @@ export namespace TraderMgmt {
             this.noMovement = noMovement;
         }
     }
-    export namespace Invincbility {
+    export namespace Invincibility {
         export const NoHurt = "Trader_NoHurt";
         export const NoMovement = "Trader_NoMovement";
 
@@ -64,6 +64,9 @@ export namespace TraderMgmt {
         export const NBT_MOVEMENT_SLOWED = NBT.float(MOVEMENT_SLOWED);
         export const NBT_MOVEMENT_NORMAL = NBT.float(MOVEMENT_NORMAL);
     }
+    /**@deprecated typo */
+    export const Invincbility = Invincibility;
+
     export async function addRecipe(
         villager: Actor,
         buyAItem: ItemStack,
@@ -158,25 +161,25 @@ export namespace TraderMgmt {
     export function setInvincibility(villager: Actor, nohurt: boolean, nomovement: boolean) {
         if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return;
 
-        if (nohurt) villager.addTag(TraderMgmt.Invincbility.NoHurt);
-        else villager.removeTag(TraderMgmt.Invincbility.NoHurt);
+        if (nohurt) villager.addTag(TraderMgmt.Invincibility.NoHurt);
+        else villager.removeTag(TraderMgmt.Invincibility.NoHurt);
 
-        nomovement ? villager.addTag(TraderMgmt.Invincbility.NoMovement) : villager.removeTag(TraderMgmt.Invincbility.NoMovement);
+        nomovement ? villager.addTag(TraderMgmt.Invincibility.NoMovement) : villager.removeTag(TraderMgmt.Invincibility.NoMovement);
 
         villager.setStatusFlag(ActorFlags.NoAI, nomovement);
     }
     export function getInvincibility(villager: Actor) {
         if (!villager.ctxbase.isValid() || !TraderMgmt.isValidTrader(villager)) return { NoHurt: false, NoMovement: false };
         return {
-            NoHurt: villager.hasTag(TraderMgmt.Invincbility.NoHurt),
-            NoMovement: villager.hasTag(TraderMgmt.Invincbility.NoMovement),
+            NoHurt: villager.hasTag(TraderMgmt.Invincibility.NoHurt),
+            NoMovement: villager.hasTag(TraderMgmt.Invincibility.NoMovement),
         };
     }
 }
 
 //Invincibiltiy
 events.entityHurt.on((ev) => {
-    if (ev.entity.hasTag(TraderMgmt.Invincbility.NoHurt)) {
+    if (ev.entity.hasTag(TraderMgmt.Invincibility.NoHurt)) {
         return CANCEL;
     }
 });
