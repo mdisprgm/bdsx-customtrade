@@ -81,7 +81,7 @@ export namespace CustomTrade {
      * @param traderExp trader exp
      * @param maxUses max of uses
      * @param tier tier of the recipe
-     * @param destruct wheter destruct the `ItemStack` instances in parameters
+     * @param destruct whether destruct the `ItemStack` instances in parameters
      * @returns allocated recipe tag
      */
     export function allocateRecipeTag(
