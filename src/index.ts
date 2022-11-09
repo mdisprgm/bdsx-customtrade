@@ -254,7 +254,7 @@ CustomTrade.onVillagerInteract.on((ev) => {
             }
             if (respMenu === EditorWindow.MainMenuChoices.SetProperties) {
                 const invc = TraderMgmt.getInvincibility(villager);
-                OpenTo.SetProperties(ni, new TraderMgmt.Properties(villager.getName(), invc.NoHurt, invc.NoMovement)).then((resp) => {
+                OpenTo.SetProperties(ni, new TraderMgmt.Properties(villager.getNameTag(), invc.NoHurt, invc.NoMovement)).then((resp) => {
                     if (resp === null) return;
                     const [Name, NoHurt, NoMovement] = resp;
                     if (!villager.ctxbase.isValid()) return;
